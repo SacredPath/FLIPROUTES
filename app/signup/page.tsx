@@ -85,12 +85,41 @@ export default function SignupPage() {
         },
       },
     })
-    setIsLoading(false)
+    
     if (error) {
+      setIsLoading(false)
       setError(error.message)
-    } else {
-      router.push('/dashboard')
+      return
     }
+
+    // Create user profile in users table
+    if (data.user) {
+      try {
+        const { error: profileError } = await supabase
+          .from('users')
+          .insert([
+            {
+              id: data.user.id,
+              email: sanitizedData.email,
+              full_name: sanitizedData.fullName,
+              company: sanitizedData.company,
+              role: 'customer'
+            }
+          ])
+
+        if (profileError) {
+          console.error('Error creating user profile:', profileError)
+          // Don't fail the signup if profile creation fails - it might already exist
+          // The user can still proceed
+        }
+      } catch (profileErr) {
+        console.error('Error creating user profile:', profileErr)
+        // Continue even if profile creation fails
+      }
+    }
+
+    setIsLoading(false)
+    router.push('/dashboard')
   }
 
   return (

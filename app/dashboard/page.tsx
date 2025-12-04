@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import Link from 'next/link'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/contexts/AuthContext'
-import { shipmentApi } from '@/lib/api'
+import { useRealtimeShipments } from '@/lib/hooks/useRealtimeShipments'
 import type { Shipment } from '@/lib/supabase'
 
 interface Stats {
@@ -17,34 +17,19 @@ interface Stats {
 
 export default function DashboardPage() {
   const { user, profile } = useAuth()
-  const [shipments, setShipments] = useState<Shipment[]>([])
-  const [stats, setStats] = useState<Stats>({ total: 0, inTransit: 0, delivered: 0, pending: 0 })
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  
+  // Use real-time hook to get shipments - automatically updates when data changes
+  const { shipments, loading, error: shipmentsError } = useRealtimeShipments(user?.id || null)
 
-  useEffect(() => {
-    const loadDashboardData = async () => {
-      if (!user) return
-
-      try {
-        setLoading(true)
-        
-        // Load user's shipments
-        const userShipments = await shipmentApi.getByCustomerId(user.id)
-        setShipments(userShipments)
-
-        // Load stats
-        const shipmentStats = await shipmentApi.getStats()
-        setStats(shipmentStats)
-      } catch (err: any) {
-        setError(err.message || 'Failed to load dashboard data')
-      } finally {
-        setLoading(false)
-      }
+  // Calculate stats from real-time shipments data
+  const stats = useMemo<Stats>(() => {
+    return {
+      total: shipments.length,
+      inTransit: shipments.filter(s => s.status === 'in_transit').length,
+      delivered: shipments.filter(s => s.status === 'delivered').length,
+      pending: shipments.filter(s => s.status === 'pending').length,
     }
-
-    loadDashboardData()
-  }, [user])
+  }, [shipments])
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -85,7 +70,7 @@ export default function DashboardPage() {
     )
   }
 
-  if (error) {
+  if (shipmentsError) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -95,7 +80,7 @@ export default function DashboardPage() {
             </svg>
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Error Loading Dashboard</h3>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="text-gray-600 mb-4">{shipmentsError}</p>
           <Button onClick={() => window.location.reload()}>
             Try Again
           </Button>
@@ -133,14 +118,15 @@ export default function DashboardPage() {
 
   const recentShipments = shipments.slice(0, 3).map(shipment => ({
     id: shipment.id,
+    tracking_number: shipment.tracking_number,
     origin: shipment.origin,
     destination: shipment.destination,
     status: getStatusLabel(shipment.status),
-    progress: 65, // Default progress since it's not in the type
-    eta: shipment.estimated_delivery,
+    progress: shipment.progress || 0,
+    eta: shipment.eta || shipment.estimated_delivery,
     carrier: shipment.carrier,
-    container: `CONT-${shipment.id.slice(0, 8)}`, // Generate container from ID
-    value: `$${(shipment.weight * 100).toLocaleString()}` // Estimate value from weight
+    container: shipment.container || `CONT-${shipment.id.slice(0, 8)}`,
+    value: shipment.value ? `$${shipment.value.toLocaleString()}` : `$${(shipment.weight * 100).toLocaleString()}`
   }))
 
   const quickActions = [
@@ -157,7 +143,13 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+                <div className="flex items-center gap-2 text-sm text-blue-600">
+                  <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+                  <span>Live</span>
+                </div>
+              </div>
               <p className="text-gray-600 mt-1">
                 Welcome back, {profile?.full_name || user?.email}! Here's what's happening with your shipments.
               </p>
@@ -228,7 +220,7 @@ export default function DashboardPage() {
                           </svg>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{shipment.id}</p>
+                          <p className="font-medium text-gray-900">{shipment.tracking_number}</p>
                           <p className="text-sm text-gray-600">{shipment.origin} → {shipment.destination}</p>
                           <p className="text-xs text-gray-500">{shipment.carrier}</p>
                         </div>

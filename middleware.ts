@@ -72,6 +72,20 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession()
 
+  // Debug: Log environment variables (safe ones only)
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('[MIDDLEWARE DEBUG] ENV', {
+      SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      NODE_ENV: process.env.NODE_ENV,
+    })
+  }
+  // Debug log for session and path (development only)
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('[MIDDLEWARE DEBUG] Path:', req.nextUrl.pathname)
+    console.log('[MIDDLEWARE DEBUG] Session:', session)
+  }
+
   // Define protected routes
   const protectedRoutes = [
     '/dashboard',
@@ -110,6 +124,9 @@ export async function middleware(req: NextRequest) {
 
   // If accessing a protected route without authentication
   if (isProtectedRoute && !session) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[MIDDLEWARE DEBUG] Redirecting to /login because not authenticated', { pathname })
+    }
     const redirectUrl = new URL('/login', req.url)
     redirectUrl.searchParams.set('redirect', pathname)
     return NextResponse.redirect(redirectUrl)
@@ -123,28 +140,44 @@ export async function middleware(req: NextRequest) {
         .select('role')
         .eq('id', session.user.id)
         .single()
-
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('[MIDDLEWARE DEBUG] Admin route profile:', profile)
+      }
       if (profile?.role !== 'admin') {
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('[MIDDLEWARE DEBUG] User is not admin, redirecting to /dashboard')
+        }
         return NextResponse.redirect(new URL('/dashboard', req.url))
       }
     } catch (error) {
-      // If user profile doesn't exist, redirect to dashboard
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('[MIDDLEWARE DEBUG] Error checking admin role:', error)
+      }
       return NextResponse.redirect(new URL('/dashboard', req.url))
     }
   }
 
   // If accessing sensitive API routes, require authentication
   if (isSensitiveApiRoute && !session) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[MIDDLEWARE DEBUG] Sensitive API route, not authenticated')
+    }
     return new NextResponse('Unauthorized', { status: 401 })
   }
 
   // If user is authenticated and trying to access login page, redirect to dashboard
   if (session && pathname === '/login') {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[MIDDLEWARE DEBUG] Authenticated user tried to access /login, redirecting to /dashboard')
+    }
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
   // If user is authenticated and trying to access signup page, redirect to dashboard
   if (session && pathname === '/signup') {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[MIDDLEWARE DEBUG] Authenticated user tried to access /signup, redirecting to /dashboard')
+    }
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 

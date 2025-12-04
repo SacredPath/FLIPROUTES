@@ -5,23 +5,36 @@ import { Button } from '@/components/ui/Button'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { signIn } from '@/lib/auth'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    
-    // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false)
+    setError(null)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[LOGIN DEBUG] Attempting login for', email)
+    }
+    const { error } = await signIn(email, password)
+    setIsLoading(false)
+    if (error) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('[LOGIN DEBUG] Login error:', error)
+      }
+      setError(error.message || 'Login failed. Please try again.')
+    } else {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('[LOGIN DEBUG] Login successful, redirecting to /dashboard')
+      }
       router.push('/dashboard')
-    }, 1000)
+    }
   }
 
   return (
@@ -128,6 +141,7 @@ export default function LoginPage() {
               >
                 {isLoading ? 'Signing in...' : 'Sign in'}
               </Button>
+              {error && <div className="text-red-600 text-sm mt-2 text-center">{error}</div>}
             </div>
 
             <div className="text-center mt-4">

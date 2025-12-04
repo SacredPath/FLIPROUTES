@@ -26,6 +26,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Get initial session
     const getInitialSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('[AUTHCONTEXT DEBUG] Initial session:', session)
+      }
       setUser(session?.user ?? null)
       
       if (session?.user) {
@@ -40,6 +43,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('[AUTHCONTEXT DEBUG] Auth state change:', { event, session })
+        }
         setUser(session?.user ?? null)
         
         if (session?.user) {
@@ -58,9 +64,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadProfile = async (userId: string) => {
     try {
       const profile = await userApi.getUserById(userId)
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('[AUTHCONTEXT DEBUG] Loaded profile:', profile)
+      }
       setProfile(profile)
     } catch (error) {
       console.error('Error loading profile:', error)
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('[AUTHCONTEXT DEBUG] Error loading profile:', error)
+      }
     }
   }
 

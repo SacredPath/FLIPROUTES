@@ -24,6 +24,18 @@ interface Shipment {
   currentLocation: string
   progress: number
   events?: TrackingEvent[]
+  billOfLading?: string
+  weight?: number
+  dimensions?: { length: number; width: number; height: number }
+  volume?: number
+  value?: number
+  cargoType?: string
+  container?: string
+  vessel?: string
+  voyage?: string
+  portOfLoading?: string
+  portOfDischarge?: string
+  insurance?: string
 }
 
 export default function TrackingPage() {
@@ -135,7 +147,7 @@ export default function TrackingPage() {
                     type="text"
                     value={trackingNumber}
                     onChange={(e) => setTrackingNumber(e.target.value)}
-                    placeholder="Enter tracking number (e.g., FLIP123456789)"
+                    placeholder="Enter tracking number or Bill of Lading (e.g., FLIP123456789 or BOL123)"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
@@ -193,6 +205,12 @@ export default function TrackingPage() {
                         <span className="text-gray-600">Tracking Number:</span>
                         <span className="font-medium">{shipment.id}</span>
                       </div>
+                      {shipment.billOfLading && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Bill of Lading:</span>
+                          <span className="font-medium">{shipment.billOfLading}</span>
+                        </div>
+                      )}
                       <div className="flex justify-between">
                         <span className="text-gray-600">Origin:</span>
                         <span className="font-medium">{shipment.origin}</span>
@@ -213,6 +231,72 @@ export default function TrackingPage() {
                         <span className="text-gray-600">Current Location:</span>
                         <span className="font-medium">{shipment.currentLocation}</span>
                       </div>
+                      {shipment.weight && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Weight:</span>
+                          <span className="font-medium">{shipment.weight} kg</span>
+                        </div>
+                      )}
+                      {shipment.dimensions && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Dimensions:</span>
+                          <span className="font-medium">{shipment.dimensions.length} x {shipment.dimensions.width} x {shipment.dimensions.height} cm</span>
+                        </div>
+                      )}
+                      {shipment.volume && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Volume:</span>
+                          <span className="font-medium">{shipment.volume} m³</span>
+                        </div>
+                      )}
+                      {shipment.value && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Value:</span>
+                          <span className="font-medium">${shipment.value}</span>
+                        </div>
+                      )}
+                      {shipment.cargoType && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Cargo Type:</span>
+                          <span className="font-medium">{shipment.cargoType}</span>
+                        </div>
+                      )}
+                      {shipment.container && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Container:</span>
+                          <span className="font-medium">{shipment.container}</span>
+                        </div>
+                      )}
+                      {shipment.vessel && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Vessel:</span>
+                          <span className="font-medium">{shipment.vessel}</span>
+                        </div>
+                      )}
+                      {shipment.voyage && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Voyage:</span>
+                          <span className="font-medium">{shipment.voyage}</span>
+                        </div>
+                      )}
+                      {shipment.portOfLoading && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Port of Loading:</span>
+                          <span className="font-medium">{shipment.portOfLoading}</span>
+                        </div>
+                      )}
+                      {shipment.portOfDischarge && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Port of Discharge:</span>
+                          <span className="font-medium">{shipment.portOfDischarge}</span>
+                        </div>
+                      )}
+                      {shipment.insurance && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Insurance:</span>
+                          <span className="font-medium">{shipment.insurance}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                   

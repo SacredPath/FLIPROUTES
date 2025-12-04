@@ -3,16 +3,21 @@
 import { useState } from 'react'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { shipmentApi, trackingApi } from '@/lib/api'
-import type { Shipment, TrackingEvent } from '@/lib/supabase'
+import { shipmentApi } from '@/lib/api'
+import type { Shipment } from '@/lib/supabase'
 import Navigation from '@/components/Navigation'
+import { useRealtimeTracking } from '@/lib/hooks/useRealtimeTracking'
+import { useRealtimeShipment } from '@/lib/hooks/useRealtimeShipment'
 
 export default function TrackPage() {
   const [trackingNumber, setTrackingNumber] = useState('')
-  const [shipment, setShipment] = useState<Shipment | null>(null)
-  const [trackingEvents, setTrackingEvents] = useState<TrackingEvent[]>([])
+  const [shipmentId, setShipmentId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Real-time hooks - will automatically subscribe when shipmentId is set
+  const { shipment } = useRealtimeShipment(shipmentId)
+  const { trackingEvents, loading: eventsLoading } = useRealtimeTracking(shipmentId)
 
   const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -20,15 +25,12 @@ export default function TrackPage() {
 
     setLoading(true)
     setError('')
-    setShipment(null)
-    setTrackingEvents([])
+    setShipmentId(null)
 
     try {
       const foundShipment = await shipmentApi.getByTrackingNumber(trackingNumber)
       if (foundShipment) {
-        setShipment(foundShipment)
-        const events = await trackingApi.getByShipmentId(foundShipment.id)
-        setTrackingEvents(events)
+        setShipmentId(foundShipment.id)
       } else {
         setError('Shipment not found. Please check your tracking number.')
       }
@@ -166,9 +168,15 @@ export default function TrackPage() {
           </div>
         </Card>
 
-        {/* Shipment Details */}
+            {/* Shipment Details */}
         {shipment && (
           <div className="space-y-8">
+            {/* Real-time indicator */}
+            <div className="flex items-center justify-center gap-2 text-sm text-blue-600">
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+              <span>Live tracking active</span>
+            </div>
+
             {/* Shipment Overview */}
             <Card className="p-6">
               <div className="flex items-center justify-between mb-6">
@@ -231,7 +239,12 @@ export default function TrackPage() {
 
             {/* Tracking Timeline */}
             <Card className="p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-6">Tracking Timeline</h3>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-semibold text-gray-900">Tracking Timeline</h3>
+                {eventsLoading && (
+                  <span className="text-sm text-gray-500">Loading events...</span>
+                )}
+              </div>
               {trackingEvents.length > 0 ? (
                 <div className="space-y-6">
                   {trackingEvents.map((event, index) => (

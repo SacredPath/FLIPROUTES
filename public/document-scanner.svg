@@ -1,1 +1,91 @@
- 
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#F8FAFC"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="800" height="80" fill="#1E40AF"/>
+  <text x="40" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white">Document Scanner</text>
+  
+  <!-- Scanner Device -->
+  <rect x="200" y="120" width="400" height="300" rx="20" fill="#1F2937" stroke="#374151" stroke-width="3"/>
+  <rect x="220" y="140" width="360" height="200" rx="8" fill="#111827"/>
+  
+  <!-- Scanning Glass -->
+  <rect x="240" y="160" width="320" height="160" rx="4" fill="#3B82F6" opacity="0.3"/>
+  <rect x="250" y="170" width="300" height="140" rx="2" fill="white" opacity="0.9"/>
+  
+  <!-- Document on Scanner -->
+  <rect x="280" y="190" width="240" height="100" rx="4" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+  <text x="300" y="220" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1F2937">SHIPPING MANIFEST</text>
+  <text x="300" y="240" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">Tracking: FLIP123456789</text>
+  <text x="300" y="255" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">Origin: Shanghai, China</text>
+  <text x="300" y="270" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">Destination: Los Angeles, USA</text>
+  <text x="300" y="285" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">Weight: 500kg | Volume: 2.5m³</text>
+  
+  <!-- Scanning Line -->
+  <rect x="250" y="200" width="300" height="2" fill="#EF4444"/>
+  <circle cx="250" cy="201" r="4" fill="#EF4444"/>
+  <circle cx="550" cy="201" r="4" fill="#EF4444"/>
+  
+  <!-- Scanner Controls -->
+  <rect x="220" y="360" width="80" height="40" rx="8" fill="#3B82F6"/>
+  <text x="240" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">SCAN</text>
+  
+  <rect x="320" y="360" width="80" height="40" rx="8" fill="#6B7280"/>
+  <text x="340" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">CLEAR</text>
+  
+  <rect x="420" y="360" width="80" height="40" rx="8" fill="#6B7280"/>
+  <text x="440" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">SAVE</text>
+  
+  <rect x="520" y="360" width="80" height="40" rx="8" fill="#6B7280"/>
+  <text x="540" y="385" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">SEND</text>
+  
+  <!-- Status Indicators -->
+  <circle cx="650" cy="380" r="8" fill="#10B981"/>
+  <text x="670" y="385" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">Ready</text>
+  
+  <!-- Document Stack -->
+  <rect x="50" y="120" width="120" height="160" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+  <rect x="60" y="130" width="100" height="140" rx="4" fill="#F3F4F6"/>
+  <text x="70" y="150" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1F2937">Invoice</text>
+  <text x="70" y="165" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">INV-2024-001</text>
+  
+  <rect x="55" y="125" width="120" height="160" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+  <rect x="65" y="135" width="100" height="140" rx="4" fill="#F3F4F6"/>
+  <text x="75" y="155" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1F2937">Packing List</text>
+  <text x="75" y="170" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">PL-2024-001</text>
+  
+  <rect x="60" y="130" width="120" height="160" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+  <rect x="70" y="140" width="100" height="140" rx="4" fill="#F3F4F6"/>
+  <text x="80" y="160" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#1F2937">Certificate</text>
+  <text x="80" y="175" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">CERT-2024-001</text>
+  
+  <!-- Processing Status -->
+  <rect x="50" y="300" width="120" height="120" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+  <text x="60" y="325" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1F2937">Processing</text>
+  
+  <!-- Progress Bar -->
+  <rect x="60" y="340" width="100" height="8" rx="4" fill="#E5E7EB"/>
+  <rect x="60" y="340" width="75" height="8" rx="4" fill="#3B82F6"/>
+  <text x="60" y="365" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">75% Complete</text>
+  
+  <!-- Status Messages -->
+  <text x="60" y="385" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">✓ Document detected</text>
+  <text x="60" y="400" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">✓ OCR processing</text>
+  <text x="60" y="415" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">⏳ Data extraction</text>
+  
+  <!-- Features List -->
+  <rect x="650" y="120" width="120" height="200" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+  <text x="660" y="145" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#1F2937">Features</text>
+  
+  <text x="660" y="170" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">• Auto-detect documents</text>
+  <text x="660" y="185" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">• OCR text extraction</text>
+  <text x="660" y="200" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">• Data validation</text>
+  <text x="660" y="215" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">• Auto-fill forms</text>
+  <text x="660" y="230" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">• Export to PDF</text>
+  <text x="660" y="245" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">• Cloud storage</text>
+  <text x="660" y="260" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">• API integration</text>
+  <text x="660" y="275" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">• Batch processing</text>
+  <text x="660" y="290" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">• Real-time sync</text>
+  <text x="660" y="305" font-family="Arial, sans-serif" font-size="12" fill="#6B7280">• Mobile app</text>
+</svg> 

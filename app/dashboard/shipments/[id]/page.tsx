@@ -13,59 +13,85 @@ import {
   Clock,
   AlertCircle
 } from 'lucide-react'
+import { useRealtimeShipment } from '@/lib/hooks/useRealtimeShipment'
+import { useRealtimeTracking } from '@/lib/hooks/useRealtimeTracking'
+import { shipmentApi } from '@/lib/api'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 export default function ShipmentDetailPage({ params }: { params: { id: string } }) {
-  const shipment = {
-    id: params.id,
-    tracking_number: 'FLIP123456789',
-    status: 'in_transit',
-    origin: 'Shanghai, China',
-    destination: 'Los Angeles, CA',
-    eta: '2024-01-15',
-    carrier: 'Maersk',
-    container: 'MAEU-1234567',
-    vessel: 'Maersk Sealand',
-    voyage: 'AE123',
-    weight: 500,
-    volume: 25.5,
-    value: 45000,
-    cargo_type: 'Electronics',
-    progress: 65,
-    shipper: 'Tech Corp',
-    consignee: 'Electronics Inc',
-    port_of_loading: 'Shanghai Port',
-    port_of_discharge: 'Los Angeles Port',
-    bill_of_lading: 'BL-2024-001',
-    customs_status: 'Cleared',
-    insurance: 'Covered'
+  const [shipmentId, setShipmentId] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  // Real-time hooks
+  const { shipment, loading: shipmentLoading } = useRealtimeShipment(shipmentId)
+  const { trackingEvents, loading: eventsLoading } = useRealtimeTracking(shipmentId)
+
+  useEffect(() => {
+    const loadShipment = async () => {
+      try {
+        // Try to get shipment by ID first
+        const foundShipment = await shipmentApi.getById(params.id)
+        if (foundShipment) {
+          setShipmentId(foundShipment.id)
+        } else {
+          // If not found by ID, try as tracking number
+          const byTracking = await shipmentApi.getByTrackingNumber(params.id)
+          if (byTracking) {
+            setShipmentId(byTracking.id)
+          }
+        }
+      } catch (error) {
+        console.error('Error loading shipment:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadShipment()
+  }, [params.id])
+
+  if (loading || shipmentLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading shipment details...</p>
+        </div>
+      </div>
+    )
   }
 
-  const trackingEvents = [
-    {
-      id: '1',
-      event_type: 'pickup',
-      location: 'Shanghai Port, China',
-      timestamp: '2024-01-10T10:00:00Z',
-      description: 'Container loaded onto vessel Maersk Sealand',
-      icon: '📦'
-    },
-    {
-      id: '2',
-      event_type: 'in_transit',
-      location: 'Pacific Ocean',
-      timestamp: '2024-01-11T10:00:00Z',
-      description: 'Vessel departed Shanghai Port bound for Los Angeles',
-      icon: '🚢'
-    },
-    {
-      id: '3',
-      event_type: 'in_transit',
-      location: 'Approaching Los Angeles',
-      timestamp: '2024-01-14T10:00:00Z',
-      description: 'Vessel approaching destination port',
-      icon: '📍'
+  if (!shipment) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Shipment Not Found</h2>
+          <p className="text-gray-600 mb-4">The shipment you're looking for doesn't exist.</p>
+          <Link href="/dashboard/shipments">
+            <Button>Back to Shipments</Button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  const getEventIcon = (eventType: string) => {
+    switch (eventType) {
+      case 'pickup':
+        return '📦'
+      case 'in_transit':
+        return '🚢'
+      case 'out_for_delivery':
+        return '🚚'
+      case 'delivered':
+        return '✅'
+      case 'failed':
+        return '❌'
+      default:
+        return '📍'
     }
-  ]
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -104,7 +130,13 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Shipment Details</h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-3xl font-bold text-gray-900">Shipment Details</h1>
+                <div className="flex items-center gap-2 text-sm text-blue-600">
+                  <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+                  <span>Live</span>
+                </div>
+              </div>
               <p className="text-gray-600 mt-1">Tracking shipment {shipment.tracking_number}</p>
             </div>
             <div className="flex space-x-3">
@@ -158,70 +190,104 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
                     <label className="block text-sm font-medium text-gray-700 mb-1">Carrier</label>
                     <div className="flex items-center space-x-2">
                       <Ship className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-900">{shipment.carrier}</span>
+                      <span className="text-gray-900">{shipment.carrier || 'N/A'}</span>
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Vessel</label>
-                    <p className="text-gray-900">{shipment.vessel} - {shipment.voyage}</p>
-                  </div>
+                  {shipment.vessel && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Vessel</label>
+                      <p className="text-gray-900">{shipment.vessel} {shipment.voyage ? `- ${shipment.voyage}` : ''}</p>
+                    </div>
+                  )}
                 </div>
                 
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">ETA</label>
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-900">{shipment.eta}</span>
+                  {shipment.eta && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">ETA</label>
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <span className="text-gray-900">{shipment.eta}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Container</label>
-                    <p className="text-gray-900">{shipment.container}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Cargo Type</label>
-                    <p className="text-gray-900">{shipment.cargo_type}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Value</label>
-                    <p className="text-gray-900">${shipment.value.toLocaleString()}</p>
-                  </div>
+                  )}
+                  {shipment.container && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Container</label>
+                      <p className="text-gray-900">{shipment.container}</p>
+                    </div>
+                  )}
+                  {shipment.cargo_type && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Cargo Type</label>
+                      <p className="text-gray-900">{shipment.cargo_type}</p>
+                    </div>
+                  )}
+                  {shipment.value && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Value</label>
+                      <p className="text-gray-900">${shipment.value.toLocaleString()}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </Card>
 
             {/* Tracking Timeline */}
             <Card className="p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-6">Tracking Timeline</h3>
-              <div className="space-y-6">
-                {trackingEvents.map((event, index) => (
-                  <div key={event.id} className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-lg">{event.icon}</span>
-                      </div>
-                      {index < trackingEvents.length - 1 && (
-                        <div className="w-0.5 h-8 bg-gray-200 mx-auto mt-2"></div>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-lg font-medium text-gray-900 capitalize">
-                          {event.event_type.replace('_', ' ')}
-                        </h4>
-                        <span className="text-sm text-gray-500">
-                          {new Date(event.timestamp).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <p className="text-gray-600 mt-1">{event.location}</p>
-                      {event.description && (
-                        <p className="text-sm text-gray-500 mt-2">{event.description}</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-semibold text-gray-900">Tracking Timeline</h3>
+                {eventsLoading && (
+                  <span className="text-sm text-gray-500">Loading events...</span>
+                )}
+                {trackingEvents.length > 0 && (
+                  <span className="text-sm text-gray-500">{trackingEvents.length} events</span>
+                )}
               </div>
+              {trackingEvents.length > 0 ? (
+                <div className="space-y-6">
+                  {trackingEvents.map((event, index) => (
+                    <div key={event.id} className="flex items-start space-x-4">
+                      <div className="flex-shrink-0">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-lg">{event.icon || getEventIcon(event.event_type)}</span>
+                        </div>
+                        {index < trackingEvents.length - 1 && (
+                          <div className="w-0.5 h-8 bg-gray-200 mx-auto mt-2"></div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-lg font-medium text-gray-900 capitalize">
+                            {event.event_type.replace('_', ' ')}
+                          </h4>
+                          <span className="text-sm text-gray-500">
+                            {new Date(event.timestamp).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </span>
+                        </div>
+                        <p className="text-gray-600 mt-1">{event.location}</p>
+                        {event.description && (
+                          <p className="text-sm text-gray-500 mt-2">{event.description}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                  </svg>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No tracking events yet</h3>
+                  <p className="text-gray-600">Tracking information will appear here once your shipment is in transit.</p>
+                </div>
+              )}
             </Card>
           </div>
 
@@ -234,18 +300,20 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
                 <div>
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-gray-600">Shipment Progress</span>
-                    <span className="text-gray-900">{shipment.progress}%</span>
+                    <span className="text-gray-900">{shipment.progress || 0}%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
                       className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
-                      style={{ width: `${shipment.progress}%` }}
+                      style={{ width: `${shipment.progress || 0}%` }}
                     ></div>
                   </div>
                 </div>
-                <div className="text-sm text-gray-600">
-                  <p>Estimated arrival: {shipment.eta}</p>
-                </div>
+                {shipment.eta && (
+                  <div className="text-sm text-gray-600">
+                    <p>Estimated arrival: {shipment.eta}</p>
+                  </div>
+                )}
               </div>
             </Card>
 
@@ -253,42 +321,60 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
             <Card className="p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Shipment Details</h3>
               <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Weight</span>
-                  <span className="text-sm text-gray-900">{shipment.weight} kg</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Volume</span>
-                  <span className="text-sm text-gray-900">{shipment.volume} m³</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Shipper</span>
-                  <span className="text-sm text-gray-900">{shipment.shipper}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Consignee</span>
-                  <span className="text-sm text-gray-900">{shipment.consignee}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Port of Loading</span>
-                  <span className="text-sm text-gray-900">{shipment.port_of_loading}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Port of Discharge</span>
-                  <span className="text-sm text-gray-900">{shipment.port_of_discharge}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Bill of Lading</span>
-                  <span className="text-sm text-gray-900">{shipment.bill_of_lading}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Customs Status</span>
-                  <span className="text-sm text-gray-900">{shipment.customs_status}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Insurance</span>
-                  <span className="text-sm text-gray-900">{shipment.insurance}</span>
-                </div>
+                {shipment.weight && (
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Weight</span>
+                    <span className="text-sm text-gray-900">{shipment.weight} kg</span>
+                  </div>
+                )}
+                {shipment.volume && (
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Volume</span>
+                    <span className="text-sm text-gray-900">{shipment.volume} m³</span>
+                  </div>
+                )}
+                {shipment.shipper_name && (
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Shipper</span>
+                    <span className="text-sm text-gray-900">{shipment.shipper_name}</span>
+                  </div>
+                )}
+                {shipment.consignee_name && (
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Consignee</span>
+                    <span className="text-sm text-gray-900">{shipment.consignee_name}</span>
+                  </div>
+                )}
+                {shipment.port_of_loading && (
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Port of Loading</span>
+                    <span className="text-sm text-gray-900">{shipment.port_of_loading}</span>
+                  </div>
+                )}
+                {shipment.port_of_discharge && (
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Port of Discharge</span>
+                    <span className="text-sm text-gray-900">{shipment.port_of_discharge}</span>
+                  </div>
+                )}
+                {shipment.bill_of_lading && (
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Bill of Lading</span>
+                    <span className="text-sm text-gray-900">{shipment.bill_of_lading}</span>
+                  </div>
+                )}
+                {shipment.customs_status && (
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Customs Status</span>
+                    <span className="text-sm text-gray-900">{shipment.customs_status}</span>
+                  </div>
+                )}
+                {shipment.insurance && (
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Insurance</span>
+                    <span className="text-sm text-gray-900">{shipment.insurance}</span>
+                  </div>
+                )}
               </div>
             </Card>
           </div>
