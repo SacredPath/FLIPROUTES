@@ -184,30 +184,46 @@ export default function TrackPage() {
               <span>Live tracking active</span>
             </div>
 
-            {/* Shipment Overview */}
-            <Card className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Shipment Details</h2>
-                  <div className="mt-2 space-y-1">
+            {/* Shipment Image Preview */}
+            <Card className="p-0 overflow-hidden">
+              <div className="relative w-full h-64 md:h-80 bg-gradient-to-br from-blue-50 to-indigo-100">
+                <Image
+                  src="/trucking.png"
+                  alt="Shipment in transit"
+                  fill
+                  className="object-cover opacity-90"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-sm text-gray-600">Tracking Number: </span>
-                      <span className="text-lg font-semibold text-blue-600">
-                        {shipment.tracking_number && shipment.tracking_number !== shipment.id 
-                          ? shipment.tracking_number 
-                          : trackingNumber || 'N/A'}
-                      </span>
+                      <h2 className="text-2xl font-bold mb-1">Shipment Details</h2>
+                      <div className="space-y-1">
+                        <div>
+                          <span className="text-sm opacity-90">Tracking Number: </span>
+                          <span className="text-lg font-semibold">
+                            {shipment.tracking_number && shipment.tracking_number !== shipment.id 
+                              ? shipment.tracking_number 
+                              : trackingNumber || 'N/A'}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-xs opacity-75 font-mono">ID: {shipment.id}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-xs text-gray-500">Shipment ID: </span>
-                      <span className="text-xs font-mono text-gray-500">{shipment.id}</span>
-                    </div>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm ${getStatusColor(shipment.status)}`}>
+                      {getStatusLabel(shipment.status)}
+                    </span>
                   </div>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(shipment.status)}`}>
-                  {getStatusLabel(shipment.status)}
-                </span>
               </div>
+            </Card>
+
+            {/* Shipment Overview */}
+            <Card className="p-6">
+              <h3 className="text-xl font-semibold text-gray-900 mb-6">Shipment Information</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
