@@ -44,8 +44,8 @@ export const mockShipmentNewYorkLondon: Shipment = {
   origin: 'New York, USA',
   destination: 'London, UK',
   created_at: '2025-08-01T10:00:00Z',
-  updated_at: '2025-08-10T16:30:00Z',
-  estimated_delivery: '2025-08-15',
+  updated_at: '2025-08-03T09:00:00Z',
+  estimated_delivery: '2025-08-05',
   actual_delivery: undefined,
   customer_id: '00000000-0000-0000-0000-000000000003',
   carrier: 'FedEx International',
@@ -306,9 +306,18 @@ export const mockTrackingEventsNewYorkLondon: TrackingEvent[] = [
     id: 'evt-106',
     shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
     event_type: 'in_transit',
+    location: 'London Distribution Center',
+    timestamp: '2025-08-02T14:30:00Z',
+    description: 'Package sorted and processed for local delivery',
+    icon: '📦'
+  },
+  {
+    id: 'evt-107',
+    shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
+    event_type: 'in_transit',
     location: 'London, UK',
-    timestamp: '2025-08-10T16:30:00Z',
-    description: 'Package sorted and ready for final delivery',
+    timestamp: '2025-08-03T09:00:00Z',
+    description: 'Package loaded onto delivery vehicle - Out for delivery',
     icon: '🚚'
   }
 ]
