@@ -3,7 +3,7 @@ import type { Shipment, TrackingEvent } from '@/lib/supabase'
 // Mock shipment data - Germany to Madrid, Spain (Delivered)
 export const mockShipmentGermanyMadrid: Shipment = {
   id: '44444444-4444-4444-4444-444444444444',
-  tracking_number: 'FLIP44444',
+  tracking_number: 'FLIP782951',
   status: 'delivered',
   origin: 'Berlin, Germany',
   destination: 'Madrid, Spain',
@@ -186,7 +186,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
 export function getMockShipmentByTrackingNumber(trackingNumber: string): Shipment | null {
   // Normalize tracking number (trim whitespace, uppercase)
   const normalized = trackingNumber.trim().toUpperCase()
-  if (normalized === 'FLIP44444') {
+  if (normalized === 'FLIP782951') {
     return mockShipmentGermanyMadrid
   }
   return null
