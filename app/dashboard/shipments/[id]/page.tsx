@@ -21,7 +21,6 @@ import { shipmentApi } from '@/lib/api'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { MultiStepTracking } from '@/components/shipment/MultiStepTracking'
-import { MultiStepTracking } from '@/components/shipment/MultiStepTracking'
 
 export default function ShipmentDetailPage({ params }: { params: { id: string } }) {
   const [shipmentId, setShipmentId] = useState<string | null>(null)

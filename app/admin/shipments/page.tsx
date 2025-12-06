@@ -93,7 +93,8 @@ export default function AdminShipmentsPage() {
       carrier: shipment.carrier,
       eta: shipment.eta,
       currentLocation: shipment.currentLocation,
-      progress: shipment.progress
+      progress: shipment.progress,
+      image: null
     })
     setShowForm(true)
   }
