@@ -1,16 +1,16 @@
 import type { Shipment, TrackingEvent } from '@/lib/supabase'
 
-// Mock shipment data - Germany to Madrid, Spain (Delivered)
+// Mock shipment data - Germany to Madrid, Spain (At Port)
 export const mockShipmentGermanyMadrid: Shipment = {
   id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
   tracking_number: 'FLIP782951',
-  status: 'delivered',
+  status: 'at_port',
   origin: 'Berlin, Germany',
   destination: 'Madrid, Spain',
   created_at: '2025-07-15T08:00:00Z',
   updated_at: '2025-08-05T14:45:00Z',
   estimated_delivery: '2025-08-10',
-  actual_delivery: '2025-08-05',
+  actual_delivery: undefined,
   customer_id: '00000000-0000-0000-0000-000000000002',
   carrier: 'DHL Freight',
   weight: 1250,
@@ -21,14 +21,14 @@ export const mockShipmentGermanyMadrid: Shipment = {
   },
   value: 18500,
   cargo_type: 'Electronics',
-  progress: 100,
+  progress: 85,
   shipper_name: 'TechCorp GmbH',
   consignee_name: 'Iberia Logistics S.A.',
   container: 'TRK-7890123',
   port_of_loading: undefined,
-  port_of_discharge: undefined,
+  port_of_discharge: 'Madrid Distribution Center',
   bill_of_lading: undefined,
-  customs_status: 'Cleared',
+  customs_status: 'Pending',
   insurance: 'Full Coverage',
   eta: '2025-08-10',
   volume: 5.18,
@@ -238,20 +238,29 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   {
     id: 'evt-015',
     shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
-    event_type: 'out_for_delivery',
-    location: 'Madrid, Spain',
+    event_type: 'at_port',
+    location: 'Madrid Distribution Center',
     timestamp: '2025-08-05T08:30:00Z',
-    description: 'Shipment out for final delivery to Iberia Logistics S.A.',
-    icon: '🚚'
+    description: 'Arrived at Madrid Distribution Center - Container held at facility. Contact Fliproute for local delivery arrangements',
+    icon: '⚠️'
   },
   {
     id: 'evt-016',
     shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
-    event_type: 'delivered',
-    location: 'Madrid, Spain',
+    event_type: 'at_port',
+    location: 'Madrid Distribution Center',
     timestamp: '2025-08-05T14:45:00Z',
-    description: 'Shipment delivered successfully to consignee - Signed by recipient',
-    icon: '✅'
+    description: 'Container still held at distribution center - Awaiting local delivery coordination. Please contact Fliproute for assistance',
+    icon: '⏸️'
+  },
+  {
+    id: 'evt-017',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
+    event_type: 'at_port',
+    location: 'Madrid Distribution Center',
+    timestamp: '2025-08-07T10:00:00Z',
+    description: 'Container remains at distribution center - Action required: Contact Fliproute immediately for local delivery and customs clearance',
+    icon: '🚨'
   }
 ]
 
