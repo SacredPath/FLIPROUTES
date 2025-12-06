@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS shipments (
   bill_of_lading TEXT,
   customs_status TEXT,
   insurance TEXT,
+  image_url TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

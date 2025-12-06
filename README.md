@@ -42,6 +42,32 @@ fliproute/
 └── public/               # Static assets
 ```
 
+## 👤 Admin Account Setup
+
+To create an admin account for system management and periodic updates:
+
+### Method 1: Using Admin Setup Page (Recommended)
+1. First, create an initial admin using Method 2 or 3 below
+2. Log in as admin
+3. Navigate to `/admin/setup`
+4. Create additional admin accounts through the UI
+
+### Method 2: Using Supabase Dashboard
+1. Go to Supabase Dashboard → Authentication → Users
+2. Click "Add User" and create a new user with email and password
+3. Copy the user's UUID from the user list
+4. Go to SQL Editor and run:
+   ```sql
+   UPDATE users SET role = 'admin' WHERE id = 'USER_UUID_HERE';
+   ```
+
+### Method 3: Using Setup Script
+1. Set `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`
+2. Run: `npx tsx scripts/setup-admin.ts`
+3. Follow the prompts to create an admin account
+
+**Note:** The service role key is required for creating users programmatically. Keep it secure and never expose it in client-side code.
+
 ## 🚀 Getting Started
 
 ### Prerequisites

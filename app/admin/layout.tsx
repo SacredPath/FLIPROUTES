@@ -69,6 +69,13 @@ export default function AdminLayout({
                   Users
                 </Link>
                 <Link 
+                  href="/admin/setup" 
+                  className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+                >
+                  <Shield className="w-5 h-5 mr-3" />
+                  Admin Setup
+                </Link>
+                <Link 
                   href="/admin/support" 
                   className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
                 >

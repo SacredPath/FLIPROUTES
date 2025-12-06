@@ -34,8 +34,10 @@ export default function AdminShipmentsPage() {
     carrier: '',
     eta: '',
     currentLocation: '',
-    progress: 0
+    progress: 0,
+    image: null as File | null
   })
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   useEffect(() => {
     fetchShipments()
@@ -125,8 +127,26 @@ export default function AdminShipmentsPage() {
       carrier: '',
       eta: '',
       currentLocation: '',
-      progress: 0
+      progress: 0,
+      image: null
     })
+    setImagePreview(null)
+  }
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setFormData(prev => ({
+        ...prev,
+        image: file
+      }))
+      // Create preview
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   const getStatusColor = (status: string) => {
@@ -380,6 +400,34 @@ export default function AdminShipmentsPage() {
                     onChange={(e) => setFormData({ ...formData, progress: parseInt(e.target.value) })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Shipment Image
+                  </label>
+                  <div className="mt-1 flex items-center space-x-4">
+                    {imagePreview && (
+                      <div className="flex-shrink-0">
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="h-24 w-24 object-cover rounded-lg border border-gray-300"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      />
+                      <p className="mt-1 text-xs text-gray-500">
+                        PNG, JPG, GIF up to 5MB
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex space-x-3 pt-4">

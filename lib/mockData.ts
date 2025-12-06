@@ -32,7 +32,8 @@ export const mockShipmentGermanyMadrid: Shipment = {
   insurance: 'Full Coverage',
   eta: '2025-08-10',
   volume: 5.18,
-  special_instructions: 'Handle with care - Fragile electronics'
+  special_instructions: 'Handle with care - Fragile electronics',
+  image_url: '/trucking.png'
 }
 
 export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [

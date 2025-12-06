@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { 
@@ -19,6 +20,7 @@ import { useRealtimeTracking } from '@/lib/hooks/useRealtimeTracking'
 import { shipmentApi } from '@/lib/api'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { MultiStepTracking } from '@/components/shipment/MultiStepTracking'
 import { MultiStepTracking } from '@/components/shipment/MultiStepTracking'
 
 export default function ShipmentDetailPage({ params }: { params: { id: string } }) {

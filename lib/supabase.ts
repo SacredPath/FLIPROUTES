@@ -46,6 +46,7 @@ export interface Shipment {
   bill_of_lading?: string
   customs_status?: string
   insurance?: string
+  image_url?: string
 }
 
 export interface TrackingEvent {

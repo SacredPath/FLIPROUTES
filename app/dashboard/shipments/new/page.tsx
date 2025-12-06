@@ -36,6 +36,7 @@ interface ShipmentFormData {
   bill_of_lading: string
   special_instructions: string
   eta: string
+  image: File | null
 }
 
 export default function NewShipmentPage() {
@@ -43,6 +44,7 @@ export default function NewShipmentPage() {
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [formData, setFormData] = useState<ShipmentFormData>({
     shipper_name: '',
     consignee_name: '',
@@ -60,7 +62,8 @@ export default function NewShipmentPage() {
     port_of_discharge: '',
     bill_of_lading: '',
     special_instructions: '',
-    eta: ''
+    eta: '',
+    image: null
   })
 
   const generateTrackingNumber = () => {
@@ -118,6 +121,29 @@ export default function NewShipmentPage() {
       // Create shipment
       const shipment = await shipmentApi.create(shipmentData)
 
+      // Upload image if provided
+      if (formData.image && shipment.id) {
+        try {
+          const imageFormData = new FormData()
+          imageFormData.append('file', formData.image)
+          imageFormData.append('shipmentId', shipment.id)
+
+          const uploadResponse = await fetch('/api/shipments/upload-image', {
+            method: 'POST',
+            body: imageFormData
+          })
+
+          if (uploadResponse.ok) {
+            const { imageUrl } = await uploadResponse.json()
+            // Update shipment with image URL
+            await shipmentApi.update(shipment.id, { image_url: imageUrl })
+          }
+        } catch (uploadError) {
+          console.error('Error uploading image:', uploadError)
+          // Don't fail the entire operation if image upload fails
+        }
+      }
+
       // Create initial tracking event
       if (shipment.id) {
         const { trackingApi } = await import('@/lib/api')
@@ -147,6 +173,22 @@ export default function NewShipmentPage() {
       ...prev,
       [name]: value
     }))
+  }
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setFormData(prev => ({
+        ...prev,
+        image: file
+      }))
+      // Create preview
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   return (
