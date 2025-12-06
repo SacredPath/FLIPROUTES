@@ -25,7 +25,8 @@ export function useRealtimeShipment(shipmentId: string | null) {
       try {
         // Check if this is the mock shipment
         if (shipmentId === mockShipmentGermanyMadrid.id) {
-          setShipment(mockShipmentGermanyMadrid)
+          // Return a fresh copy to ensure all fields are present
+          setShipment({ ...mockShipmentGermanyMadrid })
           setError(null)
           setLoading(false)
           return
@@ -51,34 +52,36 @@ export function useRealtimeShipment(shipmentId: string | null) {
 
     fetchShipment()
 
-    // Set up real-time subscription
-    const channel = supabase
-      .channel(`shipment:${shipmentId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'shipments',
-          filter: `id=eq.${shipmentId}`,
-        },
-        (payload) => {
-          console.log('Real-time shipment update received:', payload)
-          setShipment(payload.new as Shipment)
-        }
-      )
-      .subscribe((status) => {
-        console.log('Shipment subscription status:', status)
-        if (status === 'SUBSCRIBED') {
-          console.log('Successfully subscribed to shipment updates')
-        } else if (status === 'CHANNEL_ERROR') {
-          setError('Failed to subscribe to real-time updates')
-        }
-      })
+    // Only set up real-time subscription for non-mock shipments
+    if (shipmentId !== mockShipmentGermanyMadrid.id) {
+      const channel = supabase
+        .channel(`shipment:${shipmentId}`)
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'shipments',
+            filter: `id=eq.${shipmentId}`,
+          },
+          (payload) => {
+            console.log('Real-time shipment update received:', payload)
+            setShipment(payload.new as Shipment)
+          }
+        )
+        .subscribe((status) => {
+          console.log('Shipment subscription status:', status)
+          if (status === 'SUBSCRIBED') {
+            console.log('Successfully subscribed to shipment updates')
+          } else if (status === 'CHANNEL_ERROR') {
+            setError('Failed to subscribe to real-time updates')
+          }
+        })
 
-    // Cleanup subscription on unmount
-    return () => {
-      supabase.removeChannel(channel)
+      // Cleanup subscription on unmount
+      return () => {
+        supabase.removeChannel(channel)
+      }
     }
   }, [shipmentId])
 
