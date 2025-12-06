@@ -198,7 +198,11 @@ export default function TrackPage() {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Tracking Number:</span>
-                      <span className="font-medium">{shipment.tracking_number || trackingNumber}</span>
+                      <span className="font-medium">
+                        {shipment.tracking_number && shipment.tracking_number !== shipment.id 
+                          ? shipment.tracking_number 
+                          : trackingNumber || 'N/A'}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Origin:</span>
