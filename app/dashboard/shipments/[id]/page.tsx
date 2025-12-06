@@ -141,7 +141,11 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
               </div>
               <div className="mt-1 space-y-1">
                 <p className="text-gray-600">
-                  <span className="font-medium">Tracking Number:</span> <span className="text-blue-600 font-semibold">{shipment.tracking_number || 'N/A'}</span>
+                  <span className="font-medium">Tracking Number:</span> <span className="text-blue-600 font-semibold">
+                    {shipment.tracking_number && shipment.tracking_number !== shipment.id 
+                      ? shipment.tracking_number 
+                      : 'N/A'}
+                  </span>
                 </p>
                 <p className="text-xs text-gray-500 font-mono">
                   <span className="font-medium">Shipment ID:</span> {shipment.id}
@@ -184,7 +188,11 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Tracking Number</label>
-                    <p className="text-lg font-semibold text-blue-600">{shipment.tracking_number || 'N/A'}</p>
+                    <p className="text-lg font-semibold text-blue-600">
+                      {shipment.tracking_number && shipment.tracking_number !== shipment.id 
+                        ? shipment.tracking_number 
+                        : 'N/A'}
+                    </p>
                     <p className="text-xs text-gray-500 mt-1">Use this number to track your shipment</p>
                   </div>
                   <div>
