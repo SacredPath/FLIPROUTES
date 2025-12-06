@@ -32,6 +32,10 @@ export default function TrackPage() {
     try {
       const foundShipment = await shipmentApi.getByTrackingNumber(trackingNumber)
       if (foundShipment) {
+        // Ensure we have the tracking number from the found shipment
+        if (!foundShipment.tracking_number && trackingNumber) {
+          foundShipment.tracking_number = trackingNumber
+        }
         setShipmentId(foundShipment.id)
       } else {
         setError('Shipment not found. Please check your tracking number.')
