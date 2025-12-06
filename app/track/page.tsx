@@ -188,13 +188,19 @@ export default function TrackPage() {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Shipment Details</h2>
-                  <div className="mt-2">
-                    <span className="text-sm text-gray-600">Tracking Number: </span>
-                    <span className="text-lg font-semibold text-blue-600">
-                      {shipment.tracking_number && shipment.tracking_number !== shipment.id 
-                        ? shipment.tracking_number 
-                        : trackingNumber || 'N/A'}
-                    </span>
+                  <div className="mt-2 space-y-1">
+                    <div>
+                      <span className="text-sm text-gray-600">Tracking Number: </span>
+                      <span className="text-lg font-semibold text-blue-600">
+                        {shipment.tracking_number && shipment.tracking_number !== shipment.id 
+                          ? shipment.tracking_number 
+                          : trackingNumber || 'N/A'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-xs text-gray-500">Shipment ID: </span>
+                      <span className="text-xs font-mono text-gray-500">{shipment.id}</span>
+                    </div>
                   </div>
                 </div>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(shipment.status)}`}>
@@ -208,10 +214,16 @@ export default function TrackPage() {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Tracking Number:</span>
-                      <span className="font-medium">
+                      <span className="font-medium text-blue-600">
                         {shipment.tracking_number && shipment.tracking_number !== shipment.id 
                           ? shipment.tracking_number 
                           : trackingNumber || 'N/A'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Shipment ID (UUID):</span>
+                      <span className="font-mono text-sm text-gray-600 break-all text-right max-w-xs">
+                        {shipment.id}
                       </span>
                     </div>
                     <div className="flex justify-between">
