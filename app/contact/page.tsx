@@ -262,10 +262,18 @@ export default function ContactPage() {
                   <h3 className="text-xl font-semibold mb-4">Get in Touch</h3>
                   <div className="space-y-4">
                     <div className="flex items-start">
-                      <Phone className="w-5 h-5 text-blue-600 mr-3 mt-1" />
+                      <MessageSquare className="w-5 h-5 text-green-600 mr-3 mt-1" />
                       <div>
-                        <div className="font-medium">Phone</div>
-                        <div className="text-gray-600">+1 (415) 555-0123</div>
+                        <div className="font-medium">WhatsApp Business</div>
+                        <a 
+                          href="https://wa.me/1234567890" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-green-600 hover:text-green-700 font-medium"
+                        >
+                          Chat with Support
+                        </a>
+                        <div className="text-gray-600 text-sm mt-1">Available 24/7</div>
                       </div>
                     </div>
                     
@@ -288,15 +296,24 @@ export default function ContactPage() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-semibold mb-4">Quick Response</h3>
+                  <h3 className="text-xl font-semibold mb-4">Quick Response via WhatsApp</h3>
                   <div className="space-y-3">
+                    <a 
+                      href="https://wa.me/1234567890" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                      <MessageSquare className="w-5 h-5 mr-2" />
+                      Chat with Support on WhatsApp
+                    </a>
                     <div className="flex items-center">
                       <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                      <span className="text-sm text-gray-600">Response within 24 hours</span>
+                      <span className="text-sm text-gray-600">Instant response via WhatsApp Business</span>
                     </div>
                     <div className="flex items-center">
                       <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                      <span className="text-sm text-gray-600">24/7 emergency support</span>
+                      <span className="text-sm text-gray-600">Available 24/7</span>
                     </div>
                     <div className="flex items-center">
                       <CheckCircle className="w-4 h-4 text-green-500 mr-2" />

@@ -444,11 +444,14 @@ export default function TrackingPage() {
             Contact our support team for assistance with tracking or shipping questions
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4">
-                Contact Support
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 py-4"
+              onClick={() => window.open('https://wa.me/1234567890', '_blank', 'noopener,noreferrer')}
+            >
+              <MessageSquare className="w-5 h-5 mr-2" />
+              WhatsApp Support
+            </Button>
             <Link href="/login">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-4">
                 Access Dashboard
