@@ -117,17 +117,32 @@ export const shipmentApi = {
     }
 
     // Fall back to database
-    const { data, error } = await supabase
-      .from('shipments')
-      .select(`
-        *,
-        users!inner(email, full_name, company)
-      `)
-      .eq('tracking_number', trackingNumber)
-      .single()
-    
-    if (error) throw error
-    return data
+    try {
+      const { data, error } = await supabase
+        .from('shipments')
+        .select(`
+          *,
+          users!inner(email, full_name, company)
+        `)
+        .eq('tracking_number', trackingNumber)
+        .single()
+      
+      // If not found (PGRST116) or other error, return null
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // No rows found
+          return null
+        }
+        // For other errors, log but don't throw - return null
+        console.warn('Error fetching shipment:', error)
+        return null
+      }
+      return data
+    } catch (err) {
+      // Catch any unexpected errors and return null
+      console.warn('Error fetching shipment:', err)
+      return null
+    }
   },
 
   async create(shipment: Omit<Shipment, 'id' | 'created_at' | 'updated_at'>): Promise<Shipment> {
