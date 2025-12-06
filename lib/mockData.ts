@@ -2,7 +2,7 @@ import type { Shipment, TrackingEvent } from '@/lib/supabase'
 
 // Mock shipment data - Germany to Madrid, Spain (Delivered)
 export const mockShipmentGermanyMadrid: Shipment = {
-  id: '44444444-4444-4444-4444-444444444444',
+  id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
   tracking_number: 'FLIP782951',
   status: 'delivered',
   origin: 'Berlin, Germany',
@@ -38,7 +38,7 @@ export const mockShipmentGermanyMadrid: Shipment = {
 export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   {
     id: 'evt-001',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'pickup',
     location: 'Berlin, Germany',
     timestamp: '2025-07-15T08:00:00Z',
@@ -47,7 +47,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-002',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Berlin Distribution Center',
     timestamp: '2025-07-15T10:30:00Z',
@@ -56,7 +56,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-003',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Leipzig, Germany',
     timestamp: '2025-07-15T14:20:00Z',
@@ -65,7 +65,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-004',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Nuremberg, Germany',
     timestamp: '2025-07-15T17:45:00Z',
@@ -74,7 +74,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-005',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Munich, Germany',
     timestamp: '2025-07-15T20:15:00Z',
@@ -83,7 +83,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-006',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Austria Border',
     timestamp: '2025-07-20T09:00:00Z',
@@ -92,7 +92,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-007',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Innsbruck, Austria',
     timestamp: '2025-07-20T11:30:00Z',
@@ -101,7 +101,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-008',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Brenner Pass',
     timestamp: '2025-07-20T13:00:00Z',
@@ -110,7 +110,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-009',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Verona, Italy',
     timestamp: '2025-07-22T16:20:00Z',
@@ -119,7 +119,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-010',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Milan, Italy',
     timestamp: '2025-07-22T18:45:00Z',
@@ -128,7 +128,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-011',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'France Border',
     timestamp: '2025-07-25T08:30:00Z',
@@ -137,7 +137,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-012',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Lyon, France',
     timestamp: '2025-07-25T12:15:00Z',
@@ -146,7 +146,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-013',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Barcelona, Spain',
     timestamp: '2025-07-28T18:00:00Z',
@@ -155,7 +155,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-014',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'in_transit',
     location: 'Madrid Distribution Center',
     timestamp: '2025-08-02T10:00:00Z',
@@ -164,7 +164,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-015',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'out_for_delivery',
     location: 'Madrid, Spain',
     timestamp: '2025-08-05T08:30:00Z',
@@ -173,7 +173,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   },
   {
     id: 'evt-016',
-    shipment_id: '44444444-4444-4444-4444-444444444444',
+    shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
     event_type: 'delivered',
     location: 'Madrid, Spain',
     timestamp: '2025-08-05T14:45:00Z',
@@ -194,7 +194,7 @@ export function getMockShipmentByTrackingNumber(trackingNumber: string): Shipmen
 
 // Helper function to get mock tracking events by shipment ID
 export function getMockTrackingEventsByShipmentId(shipmentId: string): TrackingEvent[] {
-  if (shipmentId === '44444444-4444-4444-4444-444444444444') {
+  if (shipmentId === 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c') {
     return mockTrackingEventsGermanyMadrid
   }
   return []
