@@ -139,7 +139,14 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
                   <span>Live</span>
                 </div>
               </div>
-              <p className="text-gray-600 mt-1">Tracking shipment {shipment.tracking_number}</p>
+              <div className="mt-1 space-y-1">
+                <p className="text-gray-600">
+                  <span className="font-medium">Tracking Number:</span> <span className="text-blue-600 font-semibold">{shipment.tracking_number || 'N/A'}</span>
+                </p>
+                <p className="text-xs text-gray-500 font-mono">
+                  <span className="font-medium">Shipment ID:</span> {shipment.id}
+                </p>
+              </div>
             </div>
             <div className="flex space-x-3">
               <Button variant="outline" size="sm">
