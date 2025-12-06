@@ -7,10 +7,10 @@ export const mockShipmentGermanyMadrid: Shipment = {
   status: 'delivered',
   origin: 'Berlin, Germany',
   destination: 'Madrid, Spain',
-  created_at: '2024-12-15T08:00:00Z',
-  updated_at: '2024-12-19T14:45:00Z',
-  estimated_delivery: '2024-12-20',
-  actual_delivery: '2024-12-19',
+  created_at: '2025-07-15T08:00:00Z',
+  updated_at: '2025-08-05T14:45:00Z',
+  estimated_delivery: '2025-08-10',
+  actual_delivery: '2025-08-05',
   customer_id: '00000000-0000-0000-0000-000000000002',
   carrier: 'DHL Freight',
   weight: 1250,
@@ -30,7 +30,7 @@ export const mockShipmentGermanyMadrid: Shipment = {
   bill_of_lading: undefined,
   customs_status: 'Cleared',
   insurance: 'Full Coverage',
-  eta: '2024-12-20',
+  eta: '2025-08-10',
   volume: 5.18,
   special_instructions: 'Handle with care - Fragile electronics'
 }
@@ -41,7 +41,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'pickup',
     location: 'Berlin, Germany',
-    timestamp: '2024-12-15T08:00:00Z',
+    timestamp: '2025-07-15T08:00:00Z',
     description: 'Shipment picked up from TechCorp GmbH warehouse',
     icon: '📦'
   },
@@ -50,7 +50,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Berlin Distribution Center',
-    timestamp: '2024-12-15T10:30:00Z',
+    timestamp: '2025-07-15T10:30:00Z',
     description: 'Package processed and loaded onto truck',
     icon: '🚚'
   },
@@ -59,7 +59,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Leipzig, Germany',
-    timestamp: '2024-12-15T14:20:00Z',
+    timestamp: '2025-07-15T14:20:00Z',
     description: 'Truck en route - Passed through Leipzig',
     icon: '🚚'
   },
@@ -68,7 +68,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Nuremberg, Germany',
-    timestamp: '2024-12-15T17:45:00Z',
+    timestamp: '2025-07-15T17:45:00Z',
     description: 'Truck en route - Passed through Nuremberg',
     icon: '🚚'
   },
@@ -77,7 +77,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Munich, Germany',
-    timestamp: '2024-12-15T20:15:00Z',
+    timestamp: '2025-07-15T20:15:00Z',
     description: 'Truck en route - Passed through Munich',
     icon: '🚚'
   },
@@ -86,7 +86,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Austria Border',
-    timestamp: '2024-12-16T09:00:00Z',
+    timestamp: '2025-07-20T09:00:00Z',
     description: 'Crossed into Austria - Customs clearance completed',
     icon: '✅'
   },
@@ -95,7 +95,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Innsbruck, Austria',
-    timestamp: '2024-12-16T11:30:00Z',
+    timestamp: '2025-07-20T11:30:00Z',
     description: 'Truck en route - Passed through Innsbruck',
     icon: '🚚'
   },
@@ -104,7 +104,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Brenner Pass',
-    timestamp: '2024-12-16T13:00:00Z',
+    timestamp: '2025-07-20T13:00:00Z',
     description: 'Crossed Brenner Pass into Italy',
     icon: '🏔️'
   },
@@ -113,7 +113,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Verona, Italy',
-    timestamp: '2024-12-16T16:20:00Z',
+    timestamp: '2025-07-22T16:20:00Z',
     description: 'Truck en route - Passed through Verona',
     icon: '🚚'
   },
@@ -122,7 +122,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Milan, Italy',
-    timestamp: '2024-12-16T18:45:00Z',
+    timestamp: '2025-07-22T18:45:00Z',
     description: 'Truck en route - Passed through Milan',
     icon: '🚚'
   },
@@ -131,7 +131,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'France Border',
-    timestamp: '2024-12-17T08:30:00Z',
+    timestamp: '2025-07-25T08:30:00Z',
     description: 'Crossed into France - Customs clearance completed',
     icon: '✅'
   },
@@ -140,7 +140,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Lyon, France',
-    timestamp: '2024-12-17T12:15:00Z',
+    timestamp: '2025-07-25T12:15:00Z',
     description: 'Truck en route - Passed through Lyon',
     icon: '🚚'
   },
@@ -149,7 +149,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Barcelona, Spain',
-    timestamp: '2024-12-17T18:00:00Z',
+    timestamp: '2025-07-28T18:00:00Z',
     description: 'Truck en route - Passed through Barcelona',
     icon: '🚚'
   },
@@ -158,7 +158,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'in_transit',
     location: 'Madrid Distribution Center',
-    timestamp: '2024-12-18T10:00:00Z',
+    timestamp: '2025-08-02T10:00:00Z',
     description: 'Arrived at Madrid distribution center - Sorting in progress',
     icon: '📦'
   },
@@ -167,7 +167,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'out_for_delivery',
     location: 'Madrid, Spain',
-    timestamp: '2024-12-19T08:30:00Z',
+    timestamp: '2025-08-05T08:30:00Z',
     description: 'Shipment out for final delivery to Iberia Logistics S.A.',
     icon: '🚚'
   },
@@ -176,7 +176,7 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
     shipment_id: '44444444-4444-4444-4444-444444444444',
     event_type: 'delivered',
     location: 'Madrid, Spain',
-    timestamp: '2024-12-19T14:45:00Z',
+    timestamp: '2025-08-05T14:45:00Z',
     description: 'Shipment delivered successfully to consignee - Signed by recipient',
     icon: '✅'
   }
