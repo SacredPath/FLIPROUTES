@@ -290,7 +290,7 @@ export const mockTrackingEventsNewYorkLondon: TrackingEvent[] = [
     event_type: 'in_transit',
     location: 'Heathrow Airport, London',
     timestamp: '2025-08-02T06:15:00Z',
-    description: 'Aircraft arrived at Heathrow - Customs processing',
+    description: 'Aircraft arrived at Heathrow - Contact local customs for clearance',
     icon: '🛬'
   },
   {
@@ -299,7 +299,7 @@ export const mockTrackingEventsNewYorkLondon: TrackingEvent[] = [
     event_type: 'in_transit',
     location: 'London Distribution Center',
     timestamp: '2025-08-02T10:00:00Z',
-    description: 'Package cleared customs - Arrived at distribution center',
+    description: 'Arrived at distribution center - Contact local customs for clearance',
     icon: '📦'
   },
   {
@@ -375,7 +375,7 @@ export const mockTrackingEventsShanghaiLA: TrackingEvent[] = [
     event_type: 'at_port',
     location: 'Port of Los Angeles',
     timestamp: '2025-08-08T12:00:00Z',
-    description: 'Vessel arrived at Port of Los Angeles - Awaiting customs clearance',
+    description: 'Vessel arrived at Port of Los Angeles - Contact local customs for clearance',
     icon: '🚢'
   }
 ]
