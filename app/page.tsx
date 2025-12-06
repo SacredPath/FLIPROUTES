@@ -21,8 +21,11 @@ export default function HomePage() {
             src="/hero-section.png"
             alt="Global Logistics"
             fill
-            className="object-cover opacity-20"
+            className="object-cover object-center opacity-50"
             priority
+            quality={95}
+            sizes="100vw"
+            unoptimized={false}
           />
         </div>
         <div className="container mx-auto px-4 pt-20 pb-32 relative">
