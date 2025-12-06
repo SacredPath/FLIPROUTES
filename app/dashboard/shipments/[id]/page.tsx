@@ -177,7 +177,13 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Tracking Number</label>
-                    <p className="text-lg font-semibold text-gray-900">{shipment.tracking_number}</p>
+                    <p className="text-lg font-semibold text-blue-600">{shipment.tracking_number || 'N/A'}</p>
+                    <p className="text-xs text-gray-500 mt-1">Use this number to track your shipment</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Shipment ID (UUID)</label>
+                    <p className="text-sm font-mono text-gray-600 break-all">{shipment.id}</p>
+                    <p className="text-xs text-gray-500 mt-1">Internal reference identifier</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Route</label>
