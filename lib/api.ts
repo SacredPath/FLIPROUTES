@@ -2,7 +2,8 @@ import { supabase } from './supabase'
 import type { Shipment, TrackingEvent, User } from './supabase'
 import { 
   getMockShipmentByTrackingNumber, 
-  getMockTrackingEventsByTrackingNumber 
+  getMockTrackingEventsByTrackingNumber,
+  getMockTrackingEventsByShipmentId
 } from './mockData'
 
 // API base URL

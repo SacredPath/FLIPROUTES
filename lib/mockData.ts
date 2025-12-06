@@ -184,7 +184,9 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
 
 // Helper function to get mock shipment by tracking number
 export function getMockShipmentByTrackingNumber(trackingNumber: string): Shipment | null {
-  if (trackingNumber === 'FLIP789012345') {
+  // Normalize tracking number (trim whitespace, uppercase)
+  const normalized = trackingNumber.trim().toUpperCase()
+  if (normalized === 'FLIP789012345') {
     return mockShipmentGermanyMadrid
   }
   return null
@@ -200,7 +202,9 @@ export function getMockTrackingEventsByShipmentId(shipmentId: string): TrackingE
 
 // Helper function to get mock tracking events by tracking number
 export function getMockTrackingEventsByTrackingNumber(trackingNumber: string): TrackingEvent[] {
-  if (trackingNumber === 'FLIP789012345') {
+  // Normalize tracking number (trim whitespace, uppercase)
+  const normalized = trackingNumber.trim().toUpperCase()
+  if (normalized === 'FLIP789012345') {
     return mockTrackingEventsGermanyMadrid
   }
   return []
