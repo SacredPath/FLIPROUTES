@@ -229,11 +229,11 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   {
     id: 'evt-014',
     shipment_id: 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c',
-    event_type: 'in_transit',
+    event_type: 'at_port',
     location: 'Madrid Distribution Center',
     timestamp: '2025-08-02T10:00:00Z',
-    description: 'Arrived at Madrid distribution center - Sorting in progress',
-    icon: '📦'
+    description: 'Arrived at Madrid Distribution Center - Container held at facility. Contact Fliproute for local delivery arrangements',
+    icon: '⚠️'
   },
   {
     id: 'evt-015',
