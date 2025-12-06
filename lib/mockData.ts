@@ -40,7 +40,7 @@ export const mockShipmentGermanyMadrid: Shipment = {
 export const mockShipmentNewYorkLondon: Shipment = {
   id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
   tracking_number: 'FLIP123456',
-  status: 'in_transit',
+  status: 'at_port',
   origin: 'New York, USA',
   destination: 'London, UK',
   created_at: '2025-08-01T10:00:00Z',
@@ -287,56 +287,56 @@ export const mockTrackingEventsNewYorkLondon: TrackingEvent[] = [
   {
     id: 'evt-104',
     shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
-    event_type: 'in_transit',
+    event_type: 'at_port',
     location: 'Heathrow Airport, London',
     timestamp: '2025-08-02T06:15:00Z',
-    description: 'Aircraft arrived at Heathrow - Contact local customs for clearance',
-    icon: '🛬'
+    description: 'Aircraft arrived at Heathrow - Package held at port. Contact Fliproute for local delivery arrangements',
+    icon: '⚠️'
   },
   {
     id: 'evt-105',
     shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
-    event_type: 'in_transit',
+    event_type: 'at_port',
     location: 'Heathrow Airport, London',
     timestamp: '2025-08-05T10:00:00Z',
-    description: 'Package in customs hold - Awaiting clearance documentation',
-    icon: '📋'
+    description: 'Package still held at port - Awaiting local delivery coordination. Please contact Fliproute for assistance',
+    icon: '⏸️'
   },
   {
     id: 'evt-106',
     shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
-    event_type: 'in_transit',
-    location: 'London Distribution Center',
+    event_type: 'at_port',
+    location: 'Heathrow Airport, London',
     timestamp: '2025-08-08T14:00:00Z',
-    description: 'Arrived at distribution center - Contact local customs for clearance',
-    icon: '📦'
+    description: 'Package remains at port - Contact Fliproute immediately for local delivery and customs clearance assistance',
+    icon: '🚨'
   },
   {
     id: 'evt-107',
     shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
-    event_type: 'in_transit',
-    location: 'London Distribution Center',
+    event_type: 'at_port',
+    location: 'Heathrow Airport, London',
     timestamp: '2025-08-11T09:30:00Z',
-    description: 'Package sorted and processed for local delivery',
-    icon: '📦'
+    description: 'Package still held at port - Action required: Contact Fliproute for local delivery coordination',
+    icon: '⏸️'
   },
   {
     id: 'evt-108',
     shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
-    event_type: 'in_transit',
-    location: 'London, UK',
+    event_type: 'at_port',
+    location: 'Heathrow Airport, London',
     timestamp: '2025-08-14T11:00:00Z',
-    description: 'Package loaded onto delivery vehicle - Out for delivery',
-    icon: '🚚'
+    description: 'Package held at port - Contact Fliproute customer service for local delivery arrangements',
+    icon: '⚠️'
   },
   {
     id: 'evt-109',
     shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
-    event_type: 'in_transit',
-    location: 'London, UK',
+    event_type: 'at_port',
+    location: 'Heathrow Airport, London',
     timestamp: '2025-08-15T09:00:00Z',
-    description: 'Package en route to final destination',
-    icon: '🚚'
+    description: 'Package awaiting local delivery coordination - Please contact Fliproute immediately',
+    icon: '🚨'
   }
 ]
 
@@ -402,8 +402,26 @@ export const mockTrackingEventsShanghaiLA: TrackingEvent[] = [
     event_type: 'at_port',
     location: 'Port of Los Angeles',
     timestamp: '2025-08-09T12:00:00Z',
-    description: 'Vessel arrived at Port of Los Angeles - Contact local customs for clearance',
-    icon: '🚢'
+    description: 'Vessel arrived at Port of Los Angeles - Container held at port. Contact Fliproute for local delivery arrangements',
+    icon: '⚠️'
+  },
+  {
+    id: 'evt-208',
+    shipment_id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
+    event_type: 'at_port',
+    location: 'Port of Los Angeles',
+    timestamp: '2025-08-11T14:00:00Z',
+    description: 'Container still held at port - Awaiting local delivery coordination. Please contact Fliproute for assistance',
+    icon: '⏸️'
+  },
+  {
+    id: 'evt-209',
+    shipment_id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
+    event_type: 'at_port',
+    location: 'Port of Los Angeles',
+    timestamp: '2025-08-13T10:00:00Z',
+    description: 'Container remains at port - Action required: Contact Fliproute immediately for local delivery and customs clearance',
+    icon: '🚨'
   }
 ]
 
