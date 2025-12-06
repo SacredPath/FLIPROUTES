@@ -126,7 +126,7 @@ export default function DashboardPage() {
     eta: shipment.eta || shipment.estimated_delivery,
     carrier: shipment.carrier,
     container: shipment.container || `CONT-${shipment.id.slice(0, 8)}`,
-    value: shipment.value ? `$${shipment.value.toLocaleString()}` : `$${(shipment.weight * 100).toLocaleString()}`
+    value: shipment.value ? `$${shipment.value.toLocaleString()}` : shipment.weight ? `$${(shipment.weight * 100).toLocaleString()}` : 'N/A'
   }))
 
   const quickActions = [

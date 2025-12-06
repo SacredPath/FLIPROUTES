@@ -11,13 +11,15 @@ import {
   Plane,
   CheckCircle,
   Clock,
-  AlertCircle
+  AlertCircle,
+  ArrowRight
 } from 'lucide-react'
 import { useRealtimeShipment } from '@/lib/hooks/useRealtimeShipment'
 import { useRealtimeTracking } from '@/lib/hooks/useRealtimeTracking'
 import { shipmentApi } from '@/lib/api'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { MultiStepTracking } from '@/components/shipment/MultiStepTracking'
 
 export default function ShipmentDetailPage({ params }: { params: { id: string } }) {
   const [shipmentId, setShipmentId] = useState<string | null>(null)
@@ -233,62 +235,76 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
               </div>
             </Card>
 
-            {/* Tracking Timeline */}
+            {/* Multi-Step Journey Tracking */}
             <Card className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-gray-900">Tracking Timeline</h3>
+                <h3 className="text-xl font-semibold text-gray-900">Shipment Journey</h3>
                 {eventsLoading && (
-                  <span className="text-sm text-gray-500">Loading events...</span>
+                  <span className="text-sm text-gray-500">Loading journey details...</span>
                 )}
                 {trackingEvents.length > 0 && (
-                  <span className="text-sm text-gray-500">{trackingEvents.length} events</span>
+                  <span className="text-sm text-gray-500">{trackingEvents.length} milestones</span>
                 )}
               </div>
-              {trackingEvents.length > 0 ? (
-                <div className="space-y-6">
+              {shipment && trackingEvents.length > 0 ? (
+                <MultiStepTracking
+                  origin={shipment.origin}
+                  destination={shipment.destination}
+                  events={trackingEvents}
+                  currentStatus={shipment.status}
+                  progress={shipment.progress || 0}
+                />
+              ) : shipment ? (
+                <div className="text-center py-8">
+                  <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                  </svg>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Journey Starting Soon</h3>
+                  <p className="text-gray-600">Tracking information will appear here once your shipment begins its journey.</p>
+                </div>
+              ) : null}
+            </Card>
+
+            {/* Detailed Event Timeline */}
+            {trackingEvents.length > 0 && (
+              <Card className="p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-6">Detailed Event History</h3>
+                <div className="space-y-4">
                   {trackingEvents.map((event, index) => (
-                    <div key={event.id} className="flex items-start space-x-4">
+                    <div key={event.id} className="flex items-start space-x-4 pb-4 border-b border-gray-200 last:border-0">
                       <div className="flex-shrink-0">
                         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                           <span className="text-lg">{event.icon || getEventIcon(event.event_type)}</span>
                         </div>
-                        {index < trackingEvents.length - 1 && (
-                          <div className="w-0.5 h-8 bg-gray-200 mx-auto mt-2"></div>
-                        )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <h4 className="text-lg font-medium text-gray-900 capitalize">
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="text-base font-medium text-gray-900 capitalize">
                             {event.event_type.replace('_', ' ')}
                           </h4>
                           <span className="text-sm text-gray-500">
                             {new Date(event.timestamp).toLocaleDateString('en-US', {
-                              year: 'numeric',
                               month: 'short',
                               day: 'numeric',
+                              year: 'numeric',
                               hour: '2-digit',
                               minute: '2-digit'
                             })}
                           </span>
                         </div>
-                        <p className="text-gray-600 mt-1">{event.location}</p>
+                        <div className="flex items-center space-x-2 text-sm text-gray-600 mb-1">
+                          <MapPin className="w-4 h-4" />
+                          <span>{event.location}</span>
+                        </div>
                         {event.description && (
-                          <p className="text-sm text-gray-500 mt-2">{event.description}</p>
+                          <p className="text-sm text-gray-500 mt-1">{event.description}</p>
                         )}
                       </div>
                     </div>
                   ))}
                 </div>
-              ) : (
-                <div className="text-center py-8">
-                  <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                  </svg>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No tracking events yet</h3>
-                  <p className="text-gray-600">Tracking information will appear here once your shipment is in transit.</p>
-                </div>
-              )}
-            </Card>
+              </Card>
+            )}
           </div>
 
           {/* Sidebar */}

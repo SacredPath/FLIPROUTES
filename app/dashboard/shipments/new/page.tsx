@@ -84,8 +84,8 @@ export default function NewShipmentPage() {
       // Generate tracking number
       const trackingNumber = generateTrackingNumber()
 
-      // Prepare shipment data
-      const shipmentData = {
+      // Prepare shipment data - convert null to undefined for optional fields
+      const shipmentData: any = {
         tracking_number: trackingNumber,
         status: 'pending' as const,
         origin: formData.origin,
@@ -93,20 +93,26 @@ export default function NewShipmentPage() {
         customer_id: user.id,
         shipper_name: formData.shipper_name,
         consignee_name: formData.consignee_name,
-        cargo_type: formData.cargo_type || null,
-        value: formData.value ? parseFloat(formData.value) : null,
-        weight: formData.weight ? parseFloat(formData.weight) : null,
-        volume: formData.volume ? parseFloat(formData.volume) : null,
-        carrier: formData.carrier || null,
-        vessel: formData.vessel || null,
-        voyage: formData.voyage || null,
-        container: formData.container || null,
-        port_of_loading: formData.port_of_loading || null,
-        port_of_discharge: formData.port_of_discharge || null,
-        bill_of_lading: formData.bill_of_lading || null,
-        special_instructions: formData.special_instructions || null,
-        eta: formData.eta || null,
-        progress: 0
+        cargo_type: formData.cargo_type || undefined,
+        value: formData.value ? parseFloat(formData.value) : undefined,
+        weight: formData.weight ? parseFloat(formData.weight) : undefined,
+        volume: formData.volume ? parseFloat(formData.volume) : undefined,
+        carrier: formData.carrier || undefined,
+        vessel: formData.vessel || undefined,
+        voyage: formData.voyage || undefined,
+        container: formData.container || undefined,
+        port_of_loading: formData.port_of_loading || undefined,
+        port_of_discharge: formData.port_of_discharge || undefined,
+        bill_of_lading: formData.bill_of_lading || undefined,
+        special_instructions: formData.special_instructions || undefined,
+        eta: formData.eta || undefined,
+        estimated_delivery: formData.eta || undefined,
+        progress: 0,
+        dimensions: {
+          length: 0,
+          width: 0,
+          height: 0
+        }
       }
 
       // Create shipment
@@ -119,6 +125,7 @@ export default function NewShipmentPage() {
           shipment_id: shipment.id,
           event_type: 'pickup',
           location: formData.origin,
+          timestamp: new Date().toISOString(),
           description: `Shipment created and ready for pickup`,
           icon: '📦'
         })

@@ -289,14 +289,15 @@ INSERT INTO shipments (id, tracking_number, status, origin, destination, eta, ca
   ('33333333-3333-3333-3333-333333333333', 'FLIP456789123', 'delivered', 'Hamburg, Germany', 'Miami, FL', '2024-01-10', 'Hapag-Lloyd', 'HLBU-4567890', 100, 28750, '00000000-0000-0000-0000-000000000004', 'Textiles');
 
 INSERT INTO tracking_events (shipment_id, event_type, location, description, icon) VALUES
-  -- Shipment 1: FLIP123456789 (in_transit)
-  ('11111111-1111-1111-1111-111111111111', 'pickup', 'Shanghai Port, China', 'Container loaded onto vessel Maersk Sealand', '📦'),
-  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'East China Sea', 'Vessel departed Shanghai Port bound for Los Angeles', '🚢'),
-  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'Pacific Ocean', 'Vessel crossing Pacific Ocean - 50% complete', '🌊'),
-  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'Approaching Los Angeles', 'Vessel approaching destination port - ETA 2 days', '📍'),
-  ('11111111-1111-1111-1111-111111111111', 'at_port', 'Los Angeles Port', 'Vessel arrived at Los Angeles Port', '⚓'),
-  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'Los Angeles Port', 'Container unloaded from vessel', '📦'),
-  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'Los Angeles Customs', 'Customs clearance in progress', '📋'),
+  -- Shipment 1: FLIP123456789 (in_transit) - Multi-step journey
+  ('11111111-1111-1111-1111-111111111111', 'pickup', 'Shanghai Port, China', 'Container picked up and loaded onto vessel Maersk Sealand', '📦'),
+  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'East China Sea', 'Vessel departed Shanghai Port - Beginning ocean journey', '🚢'),
+  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'Pacific Ocean - Midway Point', 'Vessel crossing Pacific Ocean - 30% of journey complete', '🌊'),
+  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'Pacific Ocean - Near Hawaii', 'Vessel passing near Hawaii - 60% of journey complete', '🌊'),
+  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'Pacific Ocean - Approaching US Coast', 'Vessel approaching US West Coast - 85% of journey complete', '🌊'),
+  ('11111111-1111-1111-1111-111111111111', 'at_port', 'Los Angeles Port, CA', 'Vessel arrived at Los Angeles Port - Awaiting berth assignment', '⚓'),
+  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'Los Angeles Port - Terminal', 'Container unloaded from vessel and moved to terminal', '📦'),
+  ('11111111-1111-1111-1111-111111111111', 'in_transit', 'Los Angeles Customs', 'Customs clearance in progress - Documents under review', '📋'),
   -- Shipment 2: FLIP987654321 (at_port)
   ('22222222-2222-2222-2222-222222222222', 'pickup', 'Rotterdam Port, Netherlands', 'Container loaded onto vessel MSC', '📦'),
   ('22222222-2222-2222-2222-222222222222', 'in_transit', 'North Sea', 'Vessel departed Rotterdam Port', '🚢'),

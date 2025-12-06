@@ -20,12 +20,12 @@ export interface Shipment {
   destination: string
   created_at: string
   updated_at: string
-  estimated_delivery: string
+  estimated_delivery?: string
   actual_delivery?: string
   customer_id: string
-  carrier: string
-  weight: number
-  dimensions: {
+  carrier?: string
+  weight?: number
+  dimensions?: {
     length: number
     width: number
     height: number
@@ -34,9 +34,9 @@ export interface Shipment {
   container?: string
   vessel?: string
   voyage?: string
-  volume?: number
-  value?: number
-  cargo_type?: string
+  volume?: number | null
+  value?: number | null
+  cargo_type?: string | null
   special_instructions?: string
   progress?: number
   shipper_name?: string
@@ -51,7 +51,7 @@ export interface Shipment {
 export interface TrackingEvent {
   id: string
   shipment_id: string
-  event_type: 'pickup' | 'in_transit' | 'out_for_delivery' | 'delivered' | 'failed'
+  event_type: 'pickup' | 'in_transit' | 'at_port' | 'out_for_delivery' | 'delivered' | 'failed'
   location: string
   timestamp: string
   description: string
