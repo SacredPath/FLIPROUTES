@@ -97,6 +97,13 @@ export const shipmentApi = {
   },
 
   async getById(id: string): Promise<Shipment | null> {
+    // Check mock data first
+    if (id === 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c') {
+      const { mockShipmentGermanyMadrid } = await import('./mockData')
+      return mockShipmentGermanyMadrid
+    }
+
+    // Fall back to database
     const { data, error } = await supabase
       .from('shipments')
       .select(`
