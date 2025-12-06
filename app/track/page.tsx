@@ -186,7 +186,17 @@ export default function TrackPage() {
             {/* Shipment Overview */}
             <Card className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Shipment Details</h2>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Shipment Details</h2>
+                  <div className="mt-2">
+                    <span className="text-sm text-gray-600">Tracking Number: </span>
+                    <span className="text-lg font-semibold text-blue-600">
+                      {shipment.tracking_number && shipment.tracking_number !== shipment.id 
+                        ? shipment.tracking_number 
+                        : trackingNumber || 'N/A'}
+                    </span>
+                  </div>
+                </div>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(shipment.status)}`}>
                   {getStatusLabel(shipment.status)}
                 </span>
