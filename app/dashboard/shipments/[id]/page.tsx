@@ -175,6 +175,22 @@ export default function ShipmentDetailPage({ params }: { params: { id: string } 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
+            {/* Shipment Image Banner */}
+            {shipment.image_url && (
+              <Card className="p-0 overflow-hidden">
+                <div className="relative w-full h-64 md:h-80 bg-gradient-to-br from-blue-50 to-indigo-100">
+                  <Image
+                    src={shipment.image_url}
+                    alt="Shipment in transit"
+                    fill
+                    className="object-cover opacity-90"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+              </Card>
+            )}
+
             {/* Shipment Overview */}
             <Card className="p-6">
               <div className="flex items-center justify-between mb-6">

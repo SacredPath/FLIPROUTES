@@ -36,6 +36,8 @@ interface Shipment {
   portOfLoading?: string
   portOfDischarge?: string
   insurance?: string
+  image_url?: string
+  tracking_number?: string
 }
 
 export default function TrackingPage() {
@@ -189,14 +191,40 @@ export default function TrackingPage() {
         <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <div className="bg-white rounded-2xl shadow-lg p-8">
-                <div className="flex items-center justify-between mb-8">
-                  <h2 className="text-3xl font-bold text-gray-900">Shipment Details</h2>
-                  <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(shipment.status)}`}>
-                    {getStatusLabel(shipment.status)}
-                  </span>
+              {/* Shipment Image Banner */}
+              <div className="relative w-full h-64 md:h-80 mb-8 rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src={shipment.image_url || "/trucking.png"}
+                  alt="Shipment in transit"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-2xl font-bold mb-1">Shipment Details</h2>
+                      <div className="space-y-1">
+                        <div>
+                          <span className="text-sm opacity-90">Tracking Number: </span>
+                          <span className="text-lg font-semibold">
+                            {shipment.tracking_number || shipment.id}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-xs opacity-75 font-mono">ID: {shipment.id}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(shipment.status)}`}>
+                      {getStatusLabel(shipment.status)}
+                    </span>
+                  </div>
                 </div>
-                
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-lg p-8">
                 <div className="grid md:grid-cols-2 gap-8 mb-8">
                   <div>
                     <h3 className="text-lg font-semibold mb-4">Shipment Information</h3>

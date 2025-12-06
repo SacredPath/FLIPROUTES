@@ -92,6 +92,7 @@ export async function GET(
       portOfDischarge: shipment.port_of_discharge,
       billOfLading: shipment.bill_of_lading,
       insurance: shipment.insurance,
+      tracking_number: shipment.tracking_number,
       image_url: shipment.image_url,
       events: events?.map(e => ({
         timestamp: e.timestamp,
