@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { TrackingEvent } from '@/lib/supabase'
+import { mockTrackingEventsGermanyMadrid, mockShipmentGermanyMadrid } from '@/lib/mockData'
 
 /**
  * Hook for real-time tracking events subscription
@@ -19,9 +20,20 @@ export function useRealtimeTracking(shipmentId: string | null) {
       return
     }
 
-    // Initial fetch
+    // Initial fetch - check mock data first
     const fetchTrackingEvents = async () => {
       try {
+        // Check if this is the mock shipment
+        if (shipmentId === mockShipmentGermanyMadrid.id) {
+          setTrackingEvents(mockTrackingEventsGermanyMadrid.sort((a, b) => 
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          ))
+          setError(null)
+          setLoading(false)
+          return
+        }
+
+        // Fall back to database
         const { data, error: fetchError } = await supabase
           .from('tracking_events')
           .select('*')

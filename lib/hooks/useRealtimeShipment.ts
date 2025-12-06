@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Shipment } from '@/lib/supabase'
+import { mockShipmentGermanyMadrid } from '@/lib/mockData'
 
 /**
  * Hook for real-time shipment updates
@@ -19,9 +20,18 @@ export function useRealtimeShipment(shipmentId: string | null) {
       return
     }
 
-    // Initial fetch
+    // Initial fetch - check mock data first
     const fetchShipment = async () => {
       try {
+        // Check if this is the mock shipment
+        if (shipmentId === mockShipmentGermanyMadrid.id) {
+          setShipment(mockShipmentGermanyMadrid)
+          setError(null)
+          setLoading(false)
+          return
+        }
+
+        // Fall back to database
         const { data, error: fetchError } = await supabase
           .from('shipments')
           .select('*')

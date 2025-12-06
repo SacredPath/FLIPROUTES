@@ -1,5 +1,9 @@
 import { supabase } from './supabase'
 import type { Shipment, TrackingEvent, User } from './supabase'
+import { 
+  getMockShipmentByTrackingNumber, 
+  getMockTrackingEventsByTrackingNumber 
+} from './mockData'
 
 // API base URL
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api'
@@ -106,6 +110,13 @@ export const shipmentApi = {
   },
 
   async getByTrackingNumber(trackingNumber: string): Promise<Shipment | null> {
+    // Check mock data first
+    const mockShipment = getMockShipmentByTrackingNumber(trackingNumber)
+    if (mockShipment) {
+      return mockShipment
+    }
+
+    // Fall back to database
     const { data, error } = await supabase
       .from('shipments')
       .select(`
@@ -177,6 +188,13 @@ export const shipmentApi = {
 // Tracking events API functions
 export const trackingApi = {
   async getByShipmentId(shipmentId: string): Promise<TrackingEvent[]> {
+    // Check mock data first
+    const mockEvents = getMockTrackingEventsByShipmentId(shipmentId)
+    if (mockEvents.length > 0) {
+      return mockEvents.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+    }
+
+    // Fall back to database
     const { data, error } = await supabase
       .from('tracking_events')
       .select('*')
