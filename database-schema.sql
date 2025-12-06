@@ -289,7 +289,7 @@ INSERT INTO shipments (id, tracking_number, status, origin, destination, eta, ca
   ('33333333-3333-3333-3333-333333333333', 'FLIP456789123', 'delivered', 'Hamburg, Germany', 'Miami, FL', '2024-01-10', 'Hapag-Lloyd', 'HLBU-4567890', 100, 28750, '00000000-0000-0000-0000-000000000004', 'Textiles', NULL, NULL, NULL, NULL, NULL),
   ('44444444-4444-4444-4444-444444444444', 'FLIP789012345', 'delivered', 'Berlin, Germany', 'Madrid, Spain', '2024-12-20', 'DHL Freight', 'TRK-7890123', 100, 18500, '00000000-0000-0000-0000-000000000002', 'Electronics', 'TechCorp GmbH', 'Iberia Logistics S.A.', 1250, '2024-12-20', '2024-12-19');
 
-INSERT INTO tracking_events (shipment_id, event_type, location, description, icon) VALUES
+INSERT INTO tracking_events (shipment_id, event_type, location, description, icon, timestamp) VALUES
   -- Shipment 1: FLIP123456789 (in_transit) - Multi-step journey
   ('11111111-1111-1111-1111-111111111111', 'pickup', 'Shanghai Port, China', 'Container picked up and loaded onto vessel Maersk Sealand', '📦'),
   ('11111111-1111-1111-1111-111111111111', 'in_transit', 'East China Sea', 'Vessel departed Shanghai Port - Beginning ocean journey', '🚢'),
@@ -314,19 +314,19 @@ INSERT INTO tracking_events (shipment_id, event_type, location, description, ico
   ('33333333-3333-3333-3333-333333333333', 'out_for_delivery', 'Miami Distribution Center', 'Shipment out for final delivery', '🚚'),
   ('33333333-3333-3333-3333-333333333333', 'delivered', 'Miami, FL', 'Shipment delivered successfully to consignee', '✅'),
   -- Shipment 4: FLIP789012345 (delivered) - Germany to Madrid, Spain
-  ('44444444-4444-4444-4444-444444444444', 'pickup', 'Berlin, Germany', 'Shipment picked up from TechCorp GmbH warehouse', '📦'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Berlin Distribution Center', 'Package processed and loaded onto truck', '🚚'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Leipzig, Germany', 'Truck en route - Passed through Leipzig', '🚚'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Nuremberg, Germany', 'Truck en route - Passed through Nuremberg', '🚚'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Munich, Germany', 'Truck en route - Passed through Munich', '🚚'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Austria Border', 'Crossed into Austria - Customs clearance completed', '✅'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Innsbruck, Austria', 'Truck en route - Passed through Innsbruck', '🚚'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Brenner Pass', 'Crossed Brenner Pass into Italy', '🏔️'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Verona, Italy', 'Truck en route - Passed through Verona', '🚚'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Milan, Italy', 'Truck en route - Passed through Milan', '🚚'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'France Border', 'Crossed into France - Customs clearance completed', '✅'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Lyon, France', 'Truck en route - Passed through Lyon', '🚚'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Barcelona, Spain', 'Truck en route - Passed through Barcelona', '🚚'),
-  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Madrid Distribution Center', 'Arrived at Madrid distribution center - Sorting in progress', '📦'),
-  ('44444444-4444-4444-4444-444444444444', 'out_for_delivery', 'Madrid, Spain', 'Shipment out for final delivery to Iberia Logistics S.A.', '🚚'),
-  ('44444444-4444-4444-4444-444444444444', 'delivered', 'Madrid, Spain', 'Shipment delivered successfully to consignee - Signed by recipient', '✅'); 
+  ('44444444-4444-4444-4444-444444444444', 'pickup', 'Berlin, Germany', 'Shipment picked up from TechCorp GmbH warehouse', '📦', '2024-12-15 08:00:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Berlin Distribution Center', 'Package processed and loaded onto truck', '🚚', '2024-12-15 10:30:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Leipzig, Germany', 'Truck en route - Passed through Leipzig', '🚚', '2024-12-15 14:20:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Nuremberg, Germany', 'Truck en route - Passed through Nuremberg', '🚚', '2024-12-15 17:45:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Munich, Germany', 'Truck en route - Passed through Munich', '🚚', '2024-12-15 20:15:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Austria Border', 'Crossed into Austria - Customs clearance completed', '✅', '2024-12-16 09:00:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Innsbruck, Austria', 'Truck en route - Passed through Innsbruck', '🚚', '2024-12-16 11:30:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Brenner Pass', 'Crossed Brenner Pass into Italy', '🏔️', '2024-12-16 13:00:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Verona, Italy', 'Truck en route - Passed through Verona', '🚚', '2024-12-16 16:20:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Milan, Italy', 'Truck en route - Passed through Milan', '🚚', '2024-12-16 18:45:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'France Border', 'Crossed into France - Customs clearance completed', '✅', '2024-12-17 08:30:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Lyon, France', 'Truck en route - Passed through Lyon', '🚚', '2024-12-17 12:15:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Barcelona, Spain', 'Truck en route - Passed through Barcelona', '🚚', '2024-12-17 18:00:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'in_transit', 'Madrid Distribution Center', 'Arrived at Madrid distribution center - Sorting in progress', '📦', '2024-12-18 10:00:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'out_for_delivery', 'Madrid, Spain', 'Shipment out for final delivery to Iberia Logistics S.A.', '🚚', '2024-12-19 08:30:00+00'),
+  ('44444444-4444-4444-4444-444444444444', 'delivered', 'Madrid, Spain', 'Shipment delivered successfully to consignee - Signed by recipient', '✅', '2024-12-19 14:45:00+00'); 
