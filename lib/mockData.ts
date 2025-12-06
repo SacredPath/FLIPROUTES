@@ -44,8 +44,8 @@ export const mockShipmentNewYorkLondon: Shipment = {
   origin: 'New York, USA',
   destination: 'London, UK',
   created_at: '2025-08-01T10:00:00Z',
-  updated_at: '2025-08-03T09:00:00Z',
-  estimated_delivery: '2025-08-05',
+  updated_at: '2025-08-15T11:00:00Z',
+  estimated_delivery: '2025-08-16',
   actual_delivery: undefined,
   customer_id: '00000000-0000-0000-0000-000000000003',
   carrier: 'FedEx International',
@@ -66,7 +66,7 @@ export const mockShipmentNewYorkLondon: Shipment = {
   bill_of_lading: undefined,
   customs_status: 'In Progress',
   insurance: 'Standard Coverage',
-  eta: '2025-08-15',
+  eta: '2025-08-16',
   volume: 2.7,
   special_instructions: 'Temperature controlled - Keep refrigerated',
   image_url: '/images/air-freight.png'
@@ -80,8 +80,8 @@ export const mockShipmentShanghaiLA: Shipment = {
   origin: 'Shanghai, China',
   destination: 'Los Angeles, USA',
   created_at: '2025-07-20T06:00:00Z',
-  updated_at: '2025-08-08T12:00:00Z',
-  estimated_delivery: '2025-08-20',
+  updated_at: '2025-08-09T12:00:00Z',
+  estimated_delivery: '2025-08-12',
   actual_delivery: undefined,
   customer_id: '00000000-0000-0000-0000-000000000004',
   carrier: 'Maersk Line',
@@ -102,7 +102,7 @@ export const mockShipmentShanghaiLA: Shipment = {
   bill_of_lading: 'BL-789012345',
   customs_status: 'Pending',
   insurance: 'Premium Coverage',
-  eta: '2025-08-20',
+  eta: '2025-08-12',
   volume: 37.44,
   special_instructions: 'Container seal intact - Verify upon arrival',
   image_url: '/images/Ocean-freight.jpg'
@@ -297,27 +297,45 @@ export const mockTrackingEventsNewYorkLondon: TrackingEvent[] = [
     id: 'evt-105',
     shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
     event_type: 'in_transit',
-    location: 'London Distribution Center',
-    timestamp: '2025-08-02T10:00:00Z',
-    description: 'Arrived at distribution center - Contact local customs for clearance',
-    icon: '📦'
+    location: 'Heathrow Airport, London',
+    timestamp: '2025-08-05T10:00:00Z',
+    description: 'Package in customs hold - Awaiting clearance documentation',
+    icon: '📋'
   },
   {
     id: 'evt-106',
     shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
     event_type: 'in_transit',
     location: 'London Distribution Center',
-    timestamp: '2025-08-02T14:30:00Z',
-    description: 'Package sorted and processed for local delivery',
+    timestamp: '2025-08-08T14:00:00Z',
+    description: 'Arrived at distribution center - Contact local customs for clearance',
     icon: '📦'
   },
   {
     id: 'evt-107',
     shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
     event_type: 'in_transit',
+    location: 'London Distribution Center',
+    timestamp: '2025-08-11T09:30:00Z',
+    description: 'Package sorted and processed for local delivery',
+    icon: '📦'
+  },
+  {
+    id: 'evt-108',
+    shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
+    event_type: 'in_transit',
     location: 'London, UK',
-    timestamp: '2025-08-03T09:00:00Z',
+    timestamp: '2025-08-14T11:00:00Z',
     description: 'Package loaded onto delivery vehicle - Out for delivery',
+    icon: '🚚'
+  },
+  {
+    id: 'evt-109',
+    shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
+    event_type: 'in_transit',
+    location: 'London, UK',
+    timestamp: '2025-08-15T09:00:00Z',
+    description: 'Package en route to final destination',
     icon: '🚚'
   }
 ]
@@ -366,15 +384,24 @@ export const mockTrackingEventsShanghaiLA: TrackingEvent[] = [
     event_type: 'in_transit',
     location: 'Pacific Ocean',
     timestamp: '2025-08-02T14:00:00Z',
-    description: 'Vessel continues journey - Estimated arrival in 5 days',
+    description: 'Vessel continues journey across Pacific Ocean',
     icon: '🌊'
   },
   {
     id: 'evt-206',
     shipment_id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
+    event_type: 'in_transit',
+    location: 'Pacific Ocean',
+    timestamp: '2025-08-05T10:00:00Z',
+    description: 'Vessel en route - Approaching US West Coast',
+    icon: '🌊'
+  },
+  {
+    id: 'evt-207',
+    shipment_id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
     event_type: 'at_port',
     location: 'Port of Los Angeles',
-    timestamp: '2025-08-08T12:00:00Z',
+    timestamp: '2025-08-09T12:00:00Z',
     description: 'Vessel arrived at Port of Los Angeles - Contact local customs for clearance',
     icon: '🚢'
   }
