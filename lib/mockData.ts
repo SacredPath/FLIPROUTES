@@ -36,6 +36,78 @@ export const mockShipmentGermanyMadrid: Shipment = {
   image_url: '/trucking.png'
 }
 
+// Mock shipment data - New York to London, UK (In Transit)
+export const mockShipmentNewYorkLondon: Shipment = {
+  id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
+  tracking_number: 'FLIP123456',
+  status: 'in_transit',
+  origin: 'New York, USA',
+  destination: 'London, UK',
+  created_at: '2025-08-01T10:00:00Z',
+  updated_at: '2025-08-10T16:30:00Z',
+  estimated_delivery: '2025-08-15',
+  actual_delivery: undefined,
+  customer_id: '00000000-0000-0000-0000-000000000003',
+  carrier: 'FedEx International',
+  weight: 850,
+  dimensions: {
+    length: 180,
+    width: 100,
+    height: 150
+  },
+  value: 12500,
+  cargo_type: 'Pharmaceuticals',
+  progress: 65,
+  shipper_name: 'MedSupply Inc.',
+  consignee_name: 'UK Medical Distributors Ltd.',
+  container: 'FED-4567890',
+  port_of_loading: undefined,
+  port_of_discharge: undefined,
+  bill_of_lading: undefined,
+  customs_status: 'In Progress',
+  insurance: 'Standard Coverage',
+  eta: '2025-08-15',
+  volume: 2.7,
+  special_instructions: 'Temperature controlled - Keep refrigerated',
+  image_url: '/air-freight.png'
+}
+
+// Mock shipment data - Shanghai to Los Angeles, USA (At Port)
+export const mockShipmentShanghaiLA: Shipment = {
+  id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
+  tracking_number: 'FLIP789012',
+  status: 'at_port',
+  origin: 'Shanghai, China',
+  destination: 'Los Angeles, USA',
+  created_at: '2025-07-20T06:00:00Z',
+  updated_at: '2025-08-08T12:00:00Z',
+  estimated_delivery: '2025-08-20',
+  actual_delivery: undefined,
+  customer_id: '00000000-0000-0000-0000-000000000004',
+  carrier: 'Maersk Line',
+  weight: 2500,
+  dimensions: {
+    length: 600,
+    width: 240,
+    height: 260
+  },
+  value: 45000,
+  cargo_type: 'Consumer Goods',
+  progress: 40,
+  shipper_name: 'Global Manufacturing Co.',
+  consignee_name: 'West Coast Distribution LLC',
+  container: 'MAE-1234567',
+  port_of_loading: 'Shanghai Port',
+  port_of_discharge: 'Port of Los Angeles',
+  bill_of_lading: 'BL-789012345',
+  customs_status: 'Pending',
+  insurance: 'Premium Coverage',
+  eta: '2025-08-20',
+  volume: 37.44,
+  special_instructions: 'Container seal intact - Verify upon arrival',
+  image_url: '/Ocean-freight.jpg'
+}
+
 export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   {
     id: 'evt-001',
@@ -183,12 +255,134 @@ export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [
   }
 ]
 
+// Mock tracking events - New York to London, UK (In Transit)
+export const mockTrackingEventsNewYorkLondon: TrackingEvent[] = [
+  {
+    id: 'evt-101',
+    shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
+    event_type: 'pickup',
+    location: 'New York, USA',
+    timestamp: '2025-08-01T10:00:00Z',
+    description: 'Shipment picked up from MedSupply Inc. facility',
+    icon: '📦'
+  },
+  {
+    id: 'evt-102',
+    shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
+    event_type: 'in_transit',
+    location: 'JFK International Airport',
+    timestamp: '2025-08-01T14:30:00Z',
+    description: 'Package processed and loaded onto aircraft',
+    icon: '✈️'
+  },
+  {
+    id: 'evt-103',
+    shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
+    event_type: 'in_transit',
+    location: 'In Flight',
+    timestamp: '2025-08-01T18:00:00Z',
+    description: 'Aircraft departed JFK - En route to London',
+    icon: '✈️'
+  },
+  {
+    id: 'evt-104',
+    shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
+    event_type: 'in_transit',
+    location: 'Heathrow Airport, London',
+    timestamp: '2025-08-02T06:15:00Z',
+    description: 'Aircraft arrived at Heathrow - Customs processing',
+    icon: '🛬'
+  },
+  {
+    id: 'evt-105',
+    shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
+    event_type: 'in_transit',
+    location: 'London Distribution Center',
+    timestamp: '2025-08-02T10:00:00Z',
+    description: 'Package cleared customs - Arrived at distribution center',
+    icon: '📦'
+  },
+  {
+    id: 'evt-106',
+    shipment_id: 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d',
+    event_type: 'in_transit',
+    location: 'London, UK',
+    timestamp: '2025-08-10T16:30:00Z',
+    description: 'Package sorted and ready for final delivery',
+    icon: '🚚'
+  }
+]
+
+// Mock tracking events - Shanghai to Los Angeles, USA (At Port)
+export const mockTrackingEventsShanghaiLA: TrackingEvent[] = [
+  {
+    id: 'evt-201',
+    shipment_id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
+    event_type: 'pickup',
+    location: 'Shanghai, China',
+    timestamp: '2025-07-20T06:00:00Z',
+    description: 'Container loaded at Global Manufacturing Co. warehouse',
+    icon: '📦'
+  },
+  {
+    id: 'evt-202',
+    shipment_id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
+    event_type: 'in_transit',
+    location: 'Shanghai Port',
+    timestamp: '2025-07-22T08:00:00Z',
+    description: 'Container arrived at Shanghai Port - Awaiting vessel',
+    icon: '🚢'
+  },
+  {
+    id: 'evt-203',
+    shipment_id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
+    event_type: 'at_port',
+    location: 'Shanghai Port',
+    timestamp: '2025-07-25T10:30:00Z',
+    description: 'Container loaded onto vessel Maersk Line - Vessel departed',
+    icon: '🚢'
+  },
+  {
+    id: 'evt-204',
+    shipment_id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
+    event_type: 'in_transit',
+    location: 'Pacific Ocean',
+    timestamp: '2025-07-28T12:00:00Z',
+    description: 'Vessel en route across Pacific Ocean',
+    icon: '🌊'
+  },
+  {
+    id: 'evt-205',
+    shipment_id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
+    event_type: 'in_transit',
+    location: 'Pacific Ocean',
+    timestamp: '2025-08-02T14:00:00Z',
+    description: 'Vessel continues journey - Estimated arrival in 5 days',
+    icon: '🌊'
+  },
+  {
+    id: 'evt-206',
+    shipment_id: 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e',
+    event_type: 'at_port',
+    location: 'Port of Los Angeles',
+    timestamp: '2025-08-08T12:00:00Z',
+    description: 'Vessel arrived at Port of Los Angeles - Awaiting customs clearance',
+    icon: '🚢'
+  }
+]
+
 // Helper function to get mock shipment by tracking number
 export function getMockShipmentByTrackingNumber(trackingNumber: string): Shipment | null {
   // Normalize tracking number (trim whitespace, uppercase)
   const normalized = trackingNumber.trim().toUpperCase()
   if (normalized === 'FLIP782951') {
     return mockShipmentGermanyMadrid
+  }
+  if (normalized === 'FLIP123456') {
+    return mockShipmentNewYorkLondon
+  }
+  if (normalized === 'FLIP789012') {
+    return mockShipmentShanghaiLA
   }
   return null
 }
@@ -198,6 +392,12 @@ export function getMockTrackingEventsByShipmentId(shipmentId: string): TrackingE
   if (shipmentId === 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c') {
     return mockTrackingEventsGermanyMadrid
   }
+  if (shipmentId === 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d') {
+    return mockTrackingEventsNewYorkLondon
+  }
+  if (shipmentId === 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e') {
+    return mockTrackingEventsShanghaiLA
+  }
   return []
 }
 
@@ -205,8 +405,14 @@ export function getMockTrackingEventsByShipmentId(shipmentId: string): TrackingE
 export function getMockTrackingEventsByTrackingNumber(trackingNumber: string): TrackingEvent[] {
   // Normalize tracking number (trim whitespace, uppercase)
   const normalized = trackingNumber.trim().toUpperCase()
-  if (normalized === 'FLIP789012345') {
+  if (normalized === 'FLIP782951') {
     return mockTrackingEventsGermanyMadrid
+  }
+  if (normalized === 'FLIP123456') {
+    return mockTrackingEventsNewYorkLondon
+  }
+  if (normalized === 'FLIP789012') {
+    return mockTrackingEventsShanghaiLA
   }
   return []
 }

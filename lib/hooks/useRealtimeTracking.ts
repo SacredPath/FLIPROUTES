@@ -3,7 +3,14 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { TrackingEvent } from '@/lib/supabase'
-import { mockTrackingEventsGermanyMadrid, mockShipmentGermanyMadrid } from '@/lib/mockData'
+import { 
+  mockTrackingEventsGermanyMadrid, 
+  mockShipmentGermanyMadrid,
+  mockTrackingEventsNewYorkLondon,
+  mockShipmentNewYorkLondon,
+  mockTrackingEventsShanghaiLA,
+  mockShipmentShanghaiLA
+} from '@/lib/mockData'
 
 /**
  * Hook for real-time tracking events subscription
@@ -23,9 +30,25 @@ export function useRealtimeTracking(shipmentId: string | null) {
     // Initial fetch - check mock data first
     const fetchTrackingEvents = async () => {
       try {
-        // Check if this is the mock shipment
+        // Check if this is a mock shipment
         if (shipmentId === mockShipmentGermanyMadrid.id) {
           setTrackingEvents(mockTrackingEventsGermanyMadrid.sort((a, b) => 
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          ))
+          setError(null)
+          setLoading(false)
+          return
+        }
+        if (shipmentId === mockShipmentNewYorkLondon.id) {
+          setTrackingEvents(mockTrackingEventsNewYorkLondon.sort((a, b) => 
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          ))
+          setError(null)
+          setLoading(false)
+          return
+        }
+        if (shipmentId === mockShipmentShanghaiLA.id) {
+          setTrackingEvents(mockTrackingEventsShanghaiLA.sort((a, b) => 
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
           ))
           setError(null)
@@ -52,6 +75,15 @@ export function useRealtimeTracking(shipmentId: string | null) {
     }
 
     fetchTrackingEvents()
+
+    // Only set up real-time subscription for non-mock shipments
+    const isMockShipment = shipmentId === mockShipmentGermanyMadrid.id || 
+                          shipmentId === mockShipmentNewYorkLondon.id || 
+                          shipmentId === mockShipmentShanghaiLA.id
+
+    if (isMockShipment) {
+      return // Don't set up subscription for mock data
+    }
 
     // Set up real-time subscription
     const channel = supabase

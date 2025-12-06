@@ -102,6 +102,14 @@ export const shipmentApi = {
       const { mockShipmentGermanyMadrid } = await import('./mockData')
       return mockShipmentGermanyMadrid
     }
+    if (id === 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d') {
+      const { mockShipmentNewYorkLondon } = await import('./mockData')
+      return mockShipmentNewYorkLondon
+    }
+    if (id === 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e') {
+      const { mockShipmentShanghaiLA } = await import('./mockData')
+      return mockShipmentShanghaiLA
+    }
 
     // Fall back to database
     const { data, error } = await supabase

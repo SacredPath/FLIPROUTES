@@ -3,7 +3,11 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Shipment } from '@/lib/supabase'
-import { mockShipmentGermanyMadrid } from '@/lib/mockData'
+import { 
+  mockShipmentGermanyMadrid, 
+  mockShipmentNewYorkLondon, 
+  mockShipmentShanghaiLA 
+} from '@/lib/mockData'
 
 /**
  * Hook for real-time shipment updates
@@ -23,10 +27,21 @@ export function useRealtimeShipment(shipmentId: string | null) {
     // Initial fetch - check mock data first
     const fetchShipment = async () => {
       try {
-        // Check if this is the mock shipment
+        // Check if this is a mock shipment
         if (shipmentId === mockShipmentGermanyMadrid.id) {
-          // Return a fresh copy to ensure all fields are present
           setShipment({ ...mockShipmentGermanyMadrid })
+          setError(null)
+          setLoading(false)
+          return
+        }
+        if (shipmentId === mockShipmentNewYorkLondon.id) {
+          setShipment({ ...mockShipmentNewYorkLondon })
+          setError(null)
+          setLoading(false)
+          return
+        }
+        if (shipmentId === mockShipmentShanghaiLA.id) {
+          setShipment({ ...mockShipmentShanghaiLA })
           setError(null)
           setLoading(false)
           return
@@ -53,7 +68,11 @@ export function useRealtimeShipment(shipmentId: string | null) {
     fetchShipment()
 
     // Only set up real-time subscription for non-mock shipments
-    if (shipmentId !== mockShipmentGermanyMadrid.id) {
+    const isMockShipment = shipmentId === mockShipmentGermanyMadrid.id || 
+                          shipmentId === mockShipmentNewYorkLondon.id || 
+                          shipmentId === mockShipmentShanghaiLA.id
+    
+    if (!isMockShipment) {
       const channel = supabase
         .channel(`shipment:${shipmentId}`)
         .on(

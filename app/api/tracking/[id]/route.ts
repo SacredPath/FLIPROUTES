@@ -38,6 +38,7 @@ export async function GET(
         billOfLading: mockShipment.bill_of_lading,
         insurance: mockShipment.insurance,
         tracking_number: mockShipment.tracking_number,
+        image_url: mockShipment.image_url,
         events: mockEvents.map(e => ({
           timestamp: e.timestamp,
           location: e.location,
@@ -91,6 +92,7 @@ export async function GET(
       portOfDischarge: shipment.port_of_discharge,
       billOfLading: shipment.bill_of_lading,
       insurance: shipment.insurance,
+      image_url: shipment.image_url,
       events: events?.map(e => ({
         timestamp: e.timestamp,
         location: e.location,
