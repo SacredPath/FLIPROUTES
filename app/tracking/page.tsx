@@ -134,7 +134,7 @@ export default function TrackingPage() {
             <h1 className="text-5xl font-bold text-gray-900 mb-6">
               Track Your Shipments
             </h1>
-            <p className="text-2xl font-bold text-gray-700 mb-8 max-w-3xl mx-auto">
+            <p className="text-3xl font-bold text-gray-700 mb-8 max-w-3xl mx-auto leading-relaxed">
               Get real-time updates on your shipments with GPS tracking, milestone notifications, and predictive ETAs. 
               Monitor your cargo from pickup to delivery with complete visibility.
             </p>
