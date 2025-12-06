@@ -188,7 +188,7 @@ export default function TrackPage() {
             <Card className="p-0 overflow-hidden">
               <div className="relative w-full h-64 md:h-80 bg-gradient-to-br from-blue-50 to-indigo-100">
                 <Image
-                  src={shipment.image_url || "/trucking.png"}
+                  src={shipment.image_url || "/images/trucking.png"}
                   alt="Shipment in transit"
                   fill
                   className="object-cover opacity-90"

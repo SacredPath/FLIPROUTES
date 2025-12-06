@@ -33,7 +33,7 @@ export const mockShipmentGermanyMadrid: Shipment = {
   eta: '2025-08-10',
   volume: 5.18,
   special_instructions: 'Handle with care - Fragile electronics',
-  image_url: '/trucking.png'
+  image_url: '/images/trucking.png'
 }
 
 // Mock shipment data - New York to London, UK (In Transit)
@@ -69,7 +69,7 @@ export const mockShipmentNewYorkLondon: Shipment = {
   eta: '2025-08-15',
   volume: 2.7,
   special_instructions: 'Temperature controlled - Keep refrigerated',
-  image_url: '/air-freight.png'
+  image_url: '/images/air-freight.png'
 }
 
 // Mock shipment data - Shanghai to Los Angeles, USA (At Port)
@@ -105,7 +105,7 @@ export const mockShipmentShanghaiLA: Shipment = {
   eta: '2025-08-20',
   volume: 37.44,
   special_instructions: 'Container seal intact - Verify upon arrival',
-  image_url: '/Ocean-freight.jpg'
+  image_url: '/images/Ocean-freight.jpg'
 }
 
 export const mockTrackingEventsGermanyMadrid: TrackingEvent[] = [

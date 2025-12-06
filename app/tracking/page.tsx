@@ -196,7 +196,7 @@ export default function TrackingPage() {
               {/* Shipment Image Banner */}
               <div className="relative w-full h-64 md:h-80 mb-8 rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br from-blue-50 to-indigo-100">
                 <Image
-                  src={shipment.image_url || "/trucking.png"}
+                  src={shipment.image_url || "/images/trucking.png"}
                   alt="Shipment in transit"
                   fill
                   className="object-cover"
