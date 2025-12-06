@@ -59,6 +59,8 @@ export default function TrackingPage() {
       
       if (response.ok) {
         const data = await response.json()
+        console.log('Tracking API response:', data)
+        console.log('Image URL:', data.image_url)
         setShipment(data)
       } else if (response.status === 404) {
         setError('Shipment not found. Please check your tracking number.')
@@ -192,13 +194,14 @@ export default function TrackingPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               {/* Shipment Image Banner */}
-              <div className="relative w-full h-64 md:h-80 mb-8 rounded-2xl overflow-hidden shadow-lg">
+              <div className="relative w-full h-64 md:h-80 mb-8 rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br from-blue-50 to-indigo-100">
                 <Image
                   src={shipment.image_url || "/trucking.png"}
                   alt="Shipment in transit"
                   fill
                   className="object-cover"
                   priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
