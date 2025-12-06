@@ -167,14 +167,6 @@ export default function ApiPage() {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10"></div>
-        <div className="absolute top-0 right-0 w-full h-full">
-          <Image
-            src="/api-hero.svg"
-            alt="API Integration Illustration"
-            fill
-            className="object-cover opacity-20"
-          />
-        </div>
         <div className="container mx-auto px-4 relative">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-8">
