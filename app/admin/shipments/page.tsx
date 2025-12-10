@@ -6,13 +6,15 @@ import { Plus, Edit, Trash2, Package, MapPin, Clock, Truck, CheckCircle, X } fro
 
 interface Shipment {
   id: string
+  tracking_number?: string
   status: string
   origin: string
   destination: string
-  carrier: string
-  eta: string
-  currentLocation: string
-  progress: number
+  carrier?: string
+  eta?: string
+  estimated_delivery?: string
+  currentLocation?: string
+  progress?: number
   events?: Array<{
     timestamp: string
     location: string
@@ -28,16 +30,10 @@ export default function AdminShipmentsPage() {
   const [editingShipment, setEditingShipment] = useState<Shipment | null>(null)
   const [formData, setFormData] = useState({
     id: '',
-    status: 'pending',
     origin: '',
     destination: '',
-    carrier: '',
-    eta: '',
-    currentLocation: '',
-    progress: 0,
-    image: null as File | null
+    startDate: new Date().toISOString().split('T')[0]
   })
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   useEffect(() => {
     fetchShipments()
@@ -58,24 +54,56 @@ export default function AdminShipmentsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    if (!formData.origin || !formData.destination) {
+      alert('Please enter both origin and destination cities')
+      return
+    }
+    
     try {
-      const url = editingShipment ? '/api/admin/shipments' : '/api/admin/shipments'
-      const method = editingShipment ? 'PUT' : 'POST'
-      
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      })
+      if (editingShipment) {
+        // Update existing shipment
+        const response = await fetch('/api/admin/shipments', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: formData.id,
+            origin: formData.origin,
+            destination: formData.destination
+          })
+        })
 
-      if (response.ok) {
-        setShowForm(false)
-        setEditingShipment(null)
-        resetForm()
-        fetchShipments()
-        alert(editingShipment ? 'Shipment updated successfully!' : 'Shipment created successfully!')
+        if (response.ok) {
+          setShowForm(false)
+          setEditingShipment(null)
+          resetForm()
+          fetchShipments()
+          alert('Shipment updated successfully!')
+        } else {
+          const error = await response.json()
+          alert(error.error || 'Error updating shipment')
+        }
       } else {
-        alert('Error saving shipment')
+        // Create new shipment with auto-generated tracking
+        const response = await fetch('/api/admin/shipments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            origin: formData.origin,
+            destination: formData.destination,
+            startDate: formData.startDate
+          })
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setShowForm(false)
+          resetForm()
+          fetchShipments()
+          alert(`Shipment created successfully! Tracking: ${data.tracking_number}. ${data.eventsGenerated} tracking events auto-generated.`)
+        } else {
+          const error = await response.json()
+          alert(error.error || 'Error creating shipment')
+        }
       }
     } catch (error) {
       console.error('Error saving shipment:', error)
@@ -87,14 +115,9 @@ export default function AdminShipmentsPage() {
     setEditingShipment(shipment)
     setFormData({
       id: shipment.id,
-      status: shipment.status,
       origin: shipment.origin,
       destination: shipment.destination,
-      carrier: shipment.carrier,
-      eta: shipment.eta,
-      currentLocation: shipment.currentLocation,
-      progress: shipment.progress,
-      image: null
+      startDate: new Date().toISOString().split('T')[0]
     })
     setShowForm(true)
   }
@@ -122,33 +145,12 @@ export default function AdminShipmentsPage() {
   const resetForm = () => {
     setFormData({
       id: '',
-      status: 'pending',
       origin: '',
       destination: '',
-      carrier: '',
-      eta: '',
-      currentLocation: '',
-      progress: 0,
-      image: null
+      startDate: new Date().toISOString().split('T')[0]
     })
-    setImagePreview(null)
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setFormData(prev => ({
-        ...prev,
-        image: file
-      }))
-      // Create preview
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -221,7 +223,7 @@ export default function AdminShipmentsPage() {
                 {shipments.map((shipment) => (
                   <tr key={shipment.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {shipment.id}
+                      {shipment.tracking_number || shipment.id.substring(0, 8) + '...'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(shipment.status)}`}>
@@ -235,20 +237,20 @@ export default function AdminShipmentsPage() {
                       {shipment.destination}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {shipment.carrier}
+                      {shipment.carrier || 'N/A'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {shipment.eta}
+                      {shipment.eta || shipment.estimated_delivery || 'N/A'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       <div className="flex items-center">
                         <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                          <div 
-                            className="bg-blue-600 h-2 rounded-full" 
-                            style={{ width: `${shipment.progress}%` }}
+                          <div
+                            className="bg-blue-600 h-2 rounded-full"
+                            style={{ width: `${shipment.progress || 0}%` }}
                           ></div>
                         </div>
-                        <span className="text-xs text-gray-500">{shipment.progress}%</span>
+                        <span className="text-xs text-gray-500">{shipment.progress || 0}%</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -295,141 +297,67 @@ export default function AdminShipmentsPage() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Tracking ID *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.id}
-                    onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
+                {editingShipment && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                    <p className="text-sm text-blue-800">
+                      <strong>Note:</strong> Editing will only update origin and destination. Tracking events remain unchanged.
+                    </p>
+                  </div>
+                )}
+                
+                {!editingShipment && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                    <p className="text-sm text-green-800">
+                      <strong>Auto-Generation:</strong> Tracking events from origin to destination port will be automatically generated. The shipment will appear stuck at the destination port.
+                    </p>
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Status *
-                  </label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="at_port">At Port</option>
-                    <option value="in_transit">In Transit</option>
-                    <option value="delivered">Delivered</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Origin *
+                    Origin City *
                   </label>
                   <input
                     type="text"
                     value={formData.origin}
                     onChange={(e) => setFormData({ ...formData, origin: e.target.value })}
+                    placeholder="e.g., New York, USA or Berlin, Germany"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
+                  <p className="mt-1 text-xs text-gray-500">Enter city name with optional country</p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Destination *
+                    Destination City *
                   </label>
                   <input
                     type="text"
                     value={formData.destination}
                     onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
+                    placeholder="e.g., London, UK or Madrid, Spain"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
+                  <p className="mt-1 text-xs text-gray-500">Enter city name with optional country</p>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Carrier *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.carrier}
-                    onChange={(e) => setFormData({ ...formData, carrier: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    ETA *
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.eta}
-                    onChange={(e) => setFormData({ ...formData, eta: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Current Location
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.currentLocation}
-                    onChange={(e) => setFormData({ ...formData, currentLocation: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Progress (%)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={formData.progress}
-                    onChange={(e) => setFormData({ ...formData, progress: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Shipment Image
-                  </label>
-                  <div className="mt-1 flex items-center space-x-4">
-                    {imagePreview && (
-                      <div className="flex-shrink-0">
-                        <img
-                          src={imagePreview}
-                          alt="Preview"
-                          className="h-24 w-24 object-cover rounded-lg border border-gray-300"
-                        />
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                      />
-                      <p className="mt-1 text-xs text-gray-500">
-                        PNG, JPG, GIF up to 5MB
-                      </p>
-                    </div>
+                {!editingShipment && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Shipment Start Date *
+                    </label>
+                    <input
+                      type="date"
+                      value={formData.startDate}
+                      onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                    <p className="mt-1 text-xs text-gray-500">Pickup date - tracking events will start from this date</p>
                   </div>
-                </div>
+                )}
 
                 <div className="flex space-x-3 pt-4">
                   <Button type="submit" className="flex-1">

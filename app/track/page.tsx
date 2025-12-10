@@ -175,7 +175,7 @@ export default function TrackPage() {
           </div>
         </Card>
 
-            {/* Shipment Details */}
+        {/* Shipment Details */}
         {shipment && (
           <div className="space-y-8">
             {/* Real-time indicator */}
@@ -214,9 +214,9 @@ export default function TrackPage() {
                       </div>
                     </div>
                     <span className={`px-3 py-1 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm ${getStatusColor(shipment.status)}`}>
-                      {getStatusLabel(shipment.status)}
-                    </span>
-                  </div>
+                  {getStatusLabel(shipment.status)}
+                </span>
+              </div>
                 </div>
               </div>
             </Card>
@@ -256,10 +256,10 @@ export default function TrackPage() {
                       <span className="font-medium">{shipment.carrier}</span>
                     </div>
                     {shipment.weight && (
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Weight:</span>
-                        <span className="font-medium">{shipment.weight} kg</span>
-                      </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Weight:</span>
+                      <span className="font-medium">{shipment.weight} kg</span>
+                    </div>
                     )}
                     <div className="flex justify-between">
                       <span className="text-gray-600">Estimated Delivery:</span>
@@ -273,18 +273,18 @@ export default function TrackPage() {
                   <div className="space-y-3">
                     {shipment.dimensions ? (
                       <>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Length:</span>
-                          <span className="font-medium">{shipment.dimensions.length} cm</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Width:</span>
-                          <span className="font-medium">{shipment.dimensions.width} cm</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Height:</span>
-                          <span className="font-medium">{shipment.dimensions.height} cm</span>
-                        </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Length:</span>
+                      <span className="font-medium">{shipment.dimensions.length} cm</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Width:</span>
+                      <span className="font-medium">{shipment.dimensions.width} cm</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Height:</span>
+                      <span className="font-medium">{shipment.dimensions.height} cm</span>
+                    </div>
                       </>
                     ) : (
                       <p className="text-sm text-gray-500">Dimensions not available</p>
@@ -338,7 +338,7 @@ export default function TrackPage() {
 
             {/* Detailed Event Timeline */}
             {trackingEvents.length > 0 && (
-              <Card className="p-6">
+            <Card className="p-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-6">Detailed Event History</h3>
                 <div className="space-y-4">
                   {trackingEvents.map((event, index) => (
@@ -375,7 +375,7 @@ export default function TrackPage() {
                   ))}
                 </div>
               </Card>
-            )}
+              )}
 
             {/* Map Placeholder */}
             <Card className="p-6">
