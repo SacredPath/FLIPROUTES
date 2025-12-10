@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     const eta = calculateETA(shipmentStartDate, origin, destination)
 
     // Create shipment
-    const shipmentData = {
+    const shipmentData: any = {
       tracking_number: trackingNumber,
       status: 'at_port' as const,
       origin,
@@ -48,6 +48,7 @@ export async function POST(request: Request) {
       eta: eta.toISOString().split('T')[0],
       progress: 85,
       customs_status: 'Pending',
+      customer_id: '00000000-0000-0000-0000-000000000001', // Default admin customer ID
       created_at: shipmentStartDate.toISOString(),
       updated_at: shipmentStartDate.toISOString()
     }

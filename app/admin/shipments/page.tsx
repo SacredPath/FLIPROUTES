@@ -42,10 +42,14 @@ export default function AdminShipmentsPage() {
   const fetchShipments = async () => {
     try {
       const response = await fetch('/api/admin/shipments')
+      if (!response.ok) {
+        throw new Error('Failed to fetch shipments')
+      }
       const data = await response.json()
       setShipments(data)
     } catch (error) {
       console.error('Error fetching shipments:', error)
+      alert('Failed to load shipments. Please refresh the page.')
     } finally {
       setLoading(false)
     }
