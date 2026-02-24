@@ -68,10 +68,8 @@ export function useRealtimeShipment(shipmentId: string | null) {
       // Cleanup subscription on unmount
       return () => {
         supabase.removeChannel(channel)
-      }
-    }
-  }, [shipmentId])
+      },
+    }, [shipmentId])
 
   return { shipment, loading, error }
 }
-
