@@ -42,34 +42,39 @@ export function useRealtimeShipment(shipmentId: string | null) {
       }
     }
 
-    fetchShipment()
-        .on(
-          'postgres_changes',
-          {
-            event: 'UPDATE',
-            schema: 'public',
-            table: 'shipments',
-            filter: `id=eq.${shipmentId}`,
-          },
-          (payload) => {
-            console.log('Real-time shipment update received:', payload)
-            setShipment(payload.new as Shipment)
-          }
-        )
-        .subscribe((status) => {
-          console.log('Shipment subscription status:', status)
-          if (status === 'SUBSCRIBED') {
-            console.log('Successfully subscribed to shipment updates')
-          } else if (status === 'CHANNEL_ERROR') {
-            setError('Failed to subscribe to real-time updates')
-          }
-        })
+    // Set up real-time subscription
+    const channel = supabase
+      .channel(`shipment-${shipmentId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'shipments',
+          filter: `id=eq.${shipmentId}`,
+        },
+        (payload: any) => {
+          console.log('Real-time shipment update received:', payload)
+          setShipment(payload.new as Shipment)
+        }
+      )
+      .subscribe((status: string) => {
+        console.log('Shipment subscription status:', status)
+        if (status === 'SUBSCRIBED') {
+          console.log('Successfully subscribed to shipment updates')
+        } else if (status === 'CHANNEL_ERROR') {
+          setError('Failed to subscribe to real-time updates')
+        }
+      })
 
-      // Cleanup subscription on unmount
-      return () => {
-        supabase.removeChannel(channel)
-      },
-    }, [shipmentId])
+    // Initial fetch
+    fetchShipment()
+
+    // Cleanup subscription on unmount
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [shipmentId])
 
   return { shipment, loading, error }
 }
