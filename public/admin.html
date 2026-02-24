@@ -598,7 +598,7 @@
                 console.log('Raw response from supabase:', response);
 
                 // Handle custom client response format
-                const shipments = response || [];
+                const shipments = Array.isArray(response) ? response : [];
                 console.log('Loaded shipments:', shipments);
                 displayShipments(shipments);
             } catch (error) {
