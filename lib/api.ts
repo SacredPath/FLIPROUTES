@@ -90,7 +90,7 @@ class ApiClient {
   async getUsers(): Promise<User[]> {
     const { data, error } = await supabase
       .from('users')
-      .select('email, full_name, company, role, created_at')
+      .select('id, email, full_name, company, role, created_at, updated_at')
       .order('created_at', { ascending: false })
     
     if (error) throw error
@@ -250,6 +250,27 @@ class ApiClient {
   }
 }
 
+// Export API client instance
+export const api = new ApiClient(API_BASE)
+
+// Shipments API export
+export const shipmentApi = {
+  getShipments: api.getShipments,
+  getById: api.getById,
+  getByTrackingNumber: api.getByTrackingNumber,
+  create: api.create,
+  update: api.update,
+  delete: api.delete
+}
+
+// Users API export
+export const userApi = {
+  getUsers: api.getUsers,
+  getUserById: api.getUserById,
+  updateUser: api.updateUser,
+  deleteUser: api.deleteUser
+}
+
 // Tracking events API functions
 export const trackingApi = {
   async getByShipmentId(shipmentId: string): Promise<TrackingEvent[]> {
@@ -299,6 +320,3 @@ export const trackingApi = {
     if (error) throw error
   }
 }
-
-// Export API client instance
-export const api = new ApiClient(API_BASE)
