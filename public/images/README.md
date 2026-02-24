@@ -15,7 +15,7 @@ Place your shipment images in this folder. Images will be accessible at `/images
 ## Adding New Images
 
 1. Add your image file to this folder
-2. Update the `image_url` field in `lib/mockData.ts` or in the database for shipments
+2. Update the `image_url` field in the database for shipments
 3. Use the path format: `/images/your-image-name.jpg`
 
 ## Supported Formats

@@ -66,12 +66,10 @@ export default function ForgotPasswordPage() {
               <p className="text-sm text-gray-600 mb-6">
                 We've sent a password reset link to <strong>{email}</strong>. Please check your inbox and follow the instructions.
               </p>
-              <Link href="/login">
-                <Button variant="outline" className="w-full">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Login
-                </Button>
-              </Link>
+              <Button variant="outline" className="w-full">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Home
+              </Button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -117,10 +115,10 @@ export default function ForgotPasswordPage() {
           )}
 
           <div className="mt-6 text-center">
-            <Link href="/login" className="text-sm text-blue-600 hover:text-blue-500 flex items-center justify-center">
+            <a href="#" className="text-sm text-blue-600 hover:text-blue-500 flex items-center justify-center">
               <ArrowLeft className="w-4 h-4 mr-1" />
-              Back to login
-            </Link>
+              Back to home
+            </a>
           </div>
         </Card>
       </div>

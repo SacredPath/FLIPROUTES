@@ -37,7 +37,7 @@ export default function Navigation() {
             <Link href="/" className="flex items-center">
               <Image
                 src="/logo.svg"
-                alt="Fliproute"
+                alt="Fliproutes"
                 width={120}
                 height={40}
                 className="h-8 w-auto"
@@ -81,7 +81,6 @@ export default function Navigation() {
                 <div 
                   className="absolute top-full left-0 w-64 bg-white shadow-lg border rounded-lg py-2 z-50"
                 >
-                  <Link href="/tracking" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Shipment Tracking</Link>
                   <Link href="/analytics" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Analytics & Insights</Link>
                   <Link href="/api" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">API & Integrations</Link>
                   <Link href="/mobile" className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Mobile App</Link>
@@ -89,13 +88,9 @@ export default function Navigation() {
               )}
             </div>
             
+            <Link href="/tracking.html" className="text-gray-700 hover:text-blue-600 transition-colors">Track</Link>
             <Link href="/pricing" className="text-gray-700 hover:text-blue-600 transition-colors">Pricing</Link>
             <Link href="/about" className="text-gray-700 hover:text-blue-600 transition-colors">About</Link>
-            <Link href="/careers" className="text-gray-700 hover:text-blue-600 transition-colors">Careers</Link>
-            <Link href="/login" className="text-gray-700 hover:text-blue-600 transition-colors">Login</Link>
-            <Link href="/login">
-              <Button size="sm">Get Started</Button>
-            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -123,18 +118,14 @@ export default function Navigation() {
               </div>
               <div className="border-b border-gray-200 pb-2 mb-2">
                 <div className="text-sm font-medium text-gray-500 px-3 py-2">Platform</div>
-                <Link href="/tracking" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">Shipment Tracking</Link>
                 <Link href="/analytics" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">Analytics & Insights</Link>
                 <Link href="/api" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">API & Integrations</Link>
                 <Link href="/mobile" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">Mobile App</Link>
               </div>
+              <Link href="/tracking.html" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">Track</Link>
               <Link href="/pricing" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">Pricing</Link>
               <Link href="/about" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">About</Link>
               <Link href="/careers" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">Careers</Link>
-              <Link href="/login" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors">Login</Link>
-              <Link href="/login" className="block px-3 py-2">
-                <Button size="sm" className="w-full">Get Started</Button>
-              </Link>
             </div>
           </div>
         )}

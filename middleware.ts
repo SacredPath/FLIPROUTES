@@ -1,4 +1,3 @@
-import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -40,38 +39,6 @@ export async function middleware(req: NextRequest) {
   res.headers.set('X-XSS-Protection', '1; mode=block')
   res.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
 
-  // Create Supabase client
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return req.cookies.get(name)?.value
-        },
-        set(name: string, value: string, options: any) {
-          res.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-        },
-        remove(name: string, options: any) {
-          res.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-        },
-      },
-    }
-  )
-
-  // Refresh session if expired - required for Server Components
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
   // Debug: Log environment variables (safe ones only)
   if (process.env.NODE_ENV !== 'production') {
     console.log('[MIDDLEWARE DEBUG] ENV', {
@@ -80,107 +47,20 @@ export async function middleware(req: NextRequest) {
       NODE_ENV: process.env.NODE_ENV,
     })
   }
-  // Debug log for session and path (development only)
+  // Debug log for path (development only)
   if (process.env.NODE_ENV !== 'production') {
     console.log('[MIDDLEWARE DEBUG] Path:', req.nextUrl.pathname)
-    console.log('[MIDDLEWARE DEBUG] Session:', session)
   }
 
-  // Define protected routes
-  const protectedRoutes = [
-    '/dashboard',
-    '/admin',
-    '/profile',
-    '/shipments',
-    '/reports'
-  ]
+  // Define protected routes (currently none)
+  const protectedRoutes: string[] = []
 
-  // Define admin-only routes
-  const adminRoutes = [
-    '/admin'
-  ]
-
-  // Define sensitive API routes
-  const sensitiveApiRoutes = [
-    '/api/admin',
-    '/api/shipments',
-    '/api/users'
-  ]
+  // Define sensitive API routes (currently none)
+  const sensitiveApiRoutes: string[] = []
 
   const { pathname } = req.nextUrl
 
-  // Check if the current path is a protected route
-  const isProtectedRoute = protectedRoutes.some(route => 
-    pathname.startsWith(route)
-  )
-
-  const isAdminRoute = adminRoutes.some(route => 
-    pathname.startsWith(route)
-  )
-
-  const isSensitiveApiRoute = sensitiveApiRoutes.some(route =>
-    pathname.startsWith(route)
-  )
-
-  // If accessing a protected route without authentication
-  if (isProtectedRoute && !session) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('[MIDDLEWARE DEBUG] Redirecting to /login because not authenticated', { pathname })
-    }
-    const redirectUrl = new URL('/login', req.url)
-    redirectUrl.searchParams.set('redirect', pathname)
-    return NextResponse.redirect(redirectUrl)
-  }
-
-  // If accessing admin routes, check if user is admin
-  if (isAdminRoute && session) {
-    try {
-      const { data: profile } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', session.user.id)
-        .single()
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('[MIDDLEWARE DEBUG] Admin route profile:', profile)
-      }
-      if (profile?.role !== 'admin') {
-        if (process.env.NODE_ENV !== 'production') {
-          console.log('[MIDDLEWARE DEBUG] User is not admin, redirecting to /dashboard')
-        }
-        return NextResponse.redirect(new URL('/dashboard', req.url))
-      }
-    } catch (error) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error('[MIDDLEWARE DEBUG] Error checking admin role:', error)
-      }
-      return NextResponse.redirect(new URL('/dashboard', req.url))
-    }
-  }
-
-  // If accessing sensitive API routes, require authentication
-  if (isSensitiveApiRoute && !session) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('[MIDDLEWARE DEBUG] Sensitive API route, not authenticated')
-    }
-    return new NextResponse('Unauthorized', { status: 401 })
-  }
-
-  // If user is authenticated and trying to access login page, redirect to dashboard
-  if (session && pathname === '/login') {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('[MIDDLEWARE DEBUG] Authenticated user tried to access /login, redirecting to /dashboard')
-    }
-    return NextResponse.redirect(new URL('/dashboard', req.url))
-  }
-
-  // If user is authenticated and trying to access signup page, redirect to dashboard
-  if (session && pathname === '/signup') {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('[MIDDLEWARE DEBUG] Authenticated user tried to access /signup, redirecting to /dashboard')
-    }
-    return NextResponse.redirect(new URL('/dashboard', req.url))
-  }
-
+  // No protected routes - all routes are publicly accessible
   return res
 }
 
@@ -196,4 +76,4 @@ export const config = {
      */
     '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
   ],
-} 
+}

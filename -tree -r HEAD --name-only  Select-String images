@@ -1,5 +1,0 @@
-[33mad04fef[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: Create /images folder for shipment images and update all image paths
-[33m9018c69[m fix: Simplify image display in tracking page with proper fallback
-[33m0218e42[m fix: Add image display to all tracking pages - tracking, track, and dashboard shipment detail pages
-[33m473fce9[m feat: Add two additional mock shipments with different images for testing - FLIP123456 (air-freight) and FLIP789012 (ocean-freight)
-[33m1112019[m style: Increase font size to 3xl for tracking page description text

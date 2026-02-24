@@ -41,18 +41,10 @@ export default function HomePage() {
               FlipRoutes is the leading technology platform for global logistics. We connect and digitize the world's supply chains, making global trade easier, more efficient, and more accessible.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link href="/signup">
-                <Button size="lg" className="flex items-center text-lg px-8 py-4">
-                  Get Started Free
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <Link href="/demo">
-                <Button size="lg" variant="outline" className="flex items-center text-lg px-8 py-4">
-                  <Play className="w-5 h-5 mr-2" />
-                  Watch Demo
-                </Button>
-              </Link>
+              <Button size="lg" className="flex items-center text-lg px-8 py-4">
+                Get Started Free
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
             </div>
             <div className="flex flex-wrap justify-center items-center gap-8 text-gray-600">
               <div className="flex items-center">

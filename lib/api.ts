@@ -1,10 +1,5 @@
 import { supabase } from './supabase'
-import type { Shipment, TrackingEvent, User } from './supabase'
-import { 
-  getMockShipmentByTrackingNumber, 
-  getMockTrackingEventsByTrackingNumber,
-  getMockTrackingEventsByShipmentId
-} from './mockData'
+import type { Shipment, TrackingEvent, User, QuoteRequest, DemoRequest } from './supabase'
 
 // API base URL
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api'
@@ -17,75 +12,8 @@ class ApiClient {
     this.baseUrl = baseUrl
   }
 
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`
-    const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      ...options,
-    }
-
-    try {
-      const response = await fetch(url, config)
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      
-      return await response.json()
-    } catch (error) {
-      console.error('API request failed:', error)
-      throw error
-    }
-  }
-
-  async get<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'GET' })
-  }
-
-  async post<T>(endpoint: string, data: any): Promise<T> {
-    return this.request<T>(endpoint, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    })
-  }
-
-  async put<T>(endpoint: string, data: any): Promise<T> {
-    return this.request<T>(endpoint, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    })
-  }
-
-  async delete<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'DELETE' })
-  }
-}
-
-// Create API client instance
-export const apiClient = new ApiClient(API_BASE)
-
-// Shipment API functions
-export const shipmentApi = {
-  async getAll(): Promise<Shipment[]> {
-    const { data, error } = await supabase
-      .from('shipments')
-      .select(`
-        *,
-        users!inner(email, full_name, company)
-      `)
-      .order('created_at', { ascending: false })
-    
-    if (error) throw error
-    return data || []
-  },
-
-  async getByCustomerId(customerId: string): Promise<Shipment[]> {
+  // Shipments API
+  async getShipments(customerId?: string): Promise<Shipment[]> {
     const { data, error } = await supabase
       .from('shipments')
       .select('*')
@@ -94,72 +22,37 @@ export const shipmentApi = {
     
     if (error) throw error
     return data || []
-  },
+  }
 
   async getById(id: string): Promise<Shipment | null> {
-    // Check mock data first
-    if (id === 'a7f3b2c1-8d4e-4f5a-9b6c-2e1d3f4a5b6c') {
-      const { mockShipmentGermanyMadrid } = await import('./mockData')
-      return mockShipmentGermanyMadrid
-    }
-    if (id === 'b8e4c3d2-9e5f-5g6b-0c7d-3f2e4g5b6c7d') {
-      const { mockShipmentNewYorkLondon } = await import('./mockData')
-      return mockShipmentNewYorkLondon
-    }
-    if (id === 'c9f5d4e3-0f6g-6h7c-1d8e-4g3f5h6c7d8e') {
-      const { mockShipmentShanghaiLA } = await import('./mockData')
-      return mockShipmentShanghaiLA
-    }
-
-    // Fall back to database
     const { data, error } = await supabase
       .from('shipments')
-      .select(`
-        *,
-        users!inner(email, full_name, company)
-      `)
+      .select('*')
       .eq('id', id)
       .single()
     
-    if (error) throw error
-    return data
-  },
-
-  async getByTrackingNumber(trackingNumber: string): Promise<Shipment | null> {
-    // Check mock data first
-    const mockShipment = getMockShipmentByTrackingNumber(trackingNumber)
-    if (mockShipment) {
-      return mockShipment
-    }
-
-    // Fall back to database
-    try {
-      const { data, error } = await supabase
-        .from('shipments')
-        .select(`
-          *,
-          users!inner(email, full_name, company)
-        `)
-        .eq('tracking_number', trackingNumber)
-        .single()
-      
-      // If not found (PGRST116) or other error, return null
-      if (error) {
-        if (error.code === 'PGRST116') {
-          // No rows found
-          return null
-        }
-        // For other errors, log but don't throw - return null
-        console.warn('Error fetching shipment:', error)
-        return null
-      }
-      return data
-    } catch (err) {
-      // Catch any unexpected errors and return null
-      console.warn('Error fetching shipment:', err)
+    if (error) {
+      console.error('Error fetching shipment:', error)
       return null
     }
-  },
+
+    return data
+  }
+
+  async getByTrackingNumber(trackingNumber: string): Promise<Shipment | null> {
+    const { data, error } = await supabase
+      .from('shipments')
+      .select('*')
+      .eq('tracking_number', trackingNumber)
+      .single()
+    
+    if (error) {
+      console.error('Error fetching shipment:', error)
+      return null
+    }
+
+    return data
+  }
 
   async create(shipment: Omit<Shipment, 'id' | 'created_at' | 'updated_at'>): Promise<Shipment> {
     const { data, error } = await supabase
@@ -169,8 +62,8 @@ export const shipmentApi = {
       .single()
     
     if (error) throw error
-    return data
-  },
+    return data!
+  }
 
   async update(id: string, updates: Partial<Shipment>): Promise<Shipment> {
     const { data, error } = await supabase
@@ -181,8 +74,8 @@ export const shipmentApi = {
       .single()
     
     if (error) throw error
-    return data
-  },
+    return data!
+  }
 
   async delete(id: string): Promise<void> {
     const { error } = await supabase
@@ -191,60 +84,198 @@ export const shipmentApi = {
       .eq('id', id)
     
     if (error) throw error
-  },
+  }
 
-  async getStats(): Promise<{
-    total: number
-    inTransit: number
-    delivered: number
-    pending: number
-  }> {
+  // Users API
+  async getUsers(): Promise<User[]> {
     const { data, error } = await supabase
-      .from('shipments')
-      .select('status')
+      .from('users')
+      .select('email, full_name, company, role, created_at')
+      .order('created_at', { ascending: false })
     
     if (error) throw error
+    return data || []
+  }
 
-    const stats = {
-      total: data?.length || 0,
-      inTransit: data?.filter(s => s.status === 'in_transit').length || 0,
-      delivered: data?.filter(s => s.status === 'delivered').length || 0,
-      pending: data?.filter(s => s.status === 'pending').length || 0,
+  async getUserById(id: string): Promise<User | null> {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', id)
+      .single()
+    
+    if (error) {
+      console.error('Error fetching user:', error)
+      return null
     }
 
-    return stats
+    return data
+  }
+
+  async updateUser(id: string, updates: Partial<User>): Promise<User> {
+    const { data, error } = await supabase
+      .from('users')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data!
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('users')
+      .delete()
+      .eq('id', id)
+    
+    if (error) throw error
+  }
+
+  // Quote Requests API
+  async getQuoteRequests(): Promise<QuoteRequest[]> {
+    const { data, error } = await supabase
+      .from('quote_requests')
+      .select('*')
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    return data || []
+  }
+
+  async getQuoteRequestById(id: string): Promise<QuoteRequest | null> {
+    const { data, error } = await supabase
+      .from('quote_requests')
+      .select('*')
+      .eq('id', id)
+      .single()
+    
+    if (error) {
+      console.error('Error fetching quote request:', error)
+      return null
+    }
+
+    return data
+  }
+
+  async createQuoteRequest(quoteRequest: Omit<QuoteRequest, 'id' | 'created_at' | 'status'>): Promise<QuoteRequest> {
+    const { data, error } = await supabase
+      .from('quote_requests')
+      .insert([{ ...quoteRequest, status: 'pending' }])
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data!
+  }
+
+  async updateQuoteRequest(id: string, updates: Partial<QuoteRequest>): Promise<QuoteRequest> {
+    const { data, error } = await supabase
+      .from('quote_requests')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data!
+  }
+
+  async deleteQuoteRequest(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('quote_requests')
+      .delete()
+      .eq('id', id)
+    
+    if (error) throw error
+  }
+
+  // Demo Requests API
+  async getDemoRequests(): Promise<DemoRequest[]> {
+    const { data, error } = await supabase
+      .from('demo_requests')
+      .select('*')
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    return data || []
+  }
+
+  async getDemoRequestById(id: string): Promise<DemoRequest | null> {
+    const { data, error } = await supabase
+      .from('demo_requests')
+      .select('*')
+      .eq('id', id)
+      .single()
+    
+    if (error) {
+      console.error('Error fetching demo request:', error)
+      return null
+    }
+
+    return data
+  }
+
+  async createDemoRequest(demoRequest: Omit<DemoRequest, 'id' | 'created_at'>): Promise<DemoRequest> {
+    const { data, error } = await supabase
+      .from('demo_requests')
+      .insert([demoRequest])
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data!
+  }
+
+  async updateDemoRequest(id: string, updates: Partial<DemoRequest>): Promise<DemoRequest> {
+    const { data, error } = await supabase
+      .from('demo_requests')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single()
+    
+    if (error) throw error
+    return data!
+  }
+
+  async deleteDemoRequest(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('demo_requests')
+      .delete()
+      .eq('id', id)
+    
+    if (error) throw error
   }
 }
 
 // Tracking events API functions
 export const trackingApi = {
   async getByShipmentId(shipmentId: string): Promise<TrackingEvent[]> {
-    // Check mock data first
-    const mockEvents = getMockTrackingEventsByShipmentId(shipmentId)
-    if (mockEvents.length > 0) {
-      return mockEvents.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-    }
-
-    // Fall back to database
     const { data, error } = await supabase
       .from('tracking_events')
       .select('*')
       .eq('shipment_id', shipmentId)
       .order('timestamp', { ascending: false })
-    
-    if (error) throw error
+
+    if (error) {
+      console.error('Error fetching tracking events:', error)
+      return []
+    }
+
     return data || []
   },
 
-  async create(event: Omit<TrackingEvent, 'id'>): Promise<TrackingEvent> {
+  async create(trackingEvent: Omit<TrackingEvent, 'id' | 'created_at'>): Promise<TrackingEvent> {
     const { data, error } = await supabase
       .from('tracking_events')
-      .insert([event])
+      .insert([trackingEvent])
       .select()
       .single()
     
     if (error) throw error
-    return data
+    return data!
   },
 
   async update(id: string, updates: Partial<TrackingEvent>): Promise<TrackingEvent> {
@@ -256,166 +287,18 @@ export const trackingApi = {
       .single()
     
     if (error) throw error
-    return data
-  }
-}
-
-// User API functions
-export const userApi = {
-  async getCurrentUser(): Promise<User | null> {
-    const { data: { user }, error } = await supabase.auth.getUser()
-    if (error || !user) return null
-    
-    const { data: profile, error: profileError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', user.id)
-      .single()
-    
-    if (profileError) throw profileError
-    return profile
+    return data!
   },
 
-  async updateProfile(userId: string, updates: Partial<User>): Promise<User> {
-    const { data, error } = await supabase
-      .from('users')
-      .update(updates)
-      .eq('id', userId)
-      .select()
-      .single()
-    
-    if (error) throw error
-    return data
-  },
-
-  async getAllUsers(): Promise<User[]> {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .order('created_at', { ascending: false })
-    
-    if (error) throw error
-    return data || []
-  },
-
-  async getUserById(id: string): Promise<User | null> {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
+  async delete(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('tracking_events')
+      .delete()
       .eq('id', id)
-      .single()
     
     if (error) throw error
-    return data
   }
 }
 
-// Document API functions
-export const documentApi = {
-  async getByShipmentId(shipmentId: string) {
-    const { data, error } = await supabase
-      .from('documents')
-      .select('*')
-      .eq('shipment_id', shipmentId)
-      .order('created_at', { ascending: false })
-    
-    if (error) throw error
-    return data || []
-  },
-
-  async uploadDocument(shipmentId: string, file: File) {
-    const fileName = `${shipmentId}/${file.name}`
-    const { data, error } = await supabase.storage
-      .from('documents')
-      .upload(fileName, file)
-    
-    if (error) throw error
-
-    const { data: document, error: docError } = await supabase
-      .from('documents')
-      .insert([{
-        shipment_id: shipmentId,
-        name: file.name,
-        file_path: data.path,
-        file_size: file.size,
-        mime_type: file.type
-      }])
-      .select()
-      .single()
-    
-    if (docError) throw docError
-    return document
-  },
-
-  async getDownloadUrl(filePath: string) {
-    const { data } = supabase.storage
-      .from('documents')
-      .getPublicUrl(filePath)
-    
-    return data.publicUrl
-  }
-}
-
-// Support API functions
-export const supportApi = {
-  async createTicket(ticket: {
-    user_id: string
-    shipment_id?: string
-    subject: string
-    message: string
-    priority?: string
-  }) {
-    const { data, error } = await supabase
-      .from('support_tickets')
-      .insert([ticket])
-      .select()
-      .single()
-    
-    if (error) throw error
-    return data
-  },
-
-  async getTicketsByUser(userId: string) {
-    const { data, error } = await supabase
-      .from('support_tickets')
-      .select(`
-        *,
-        shipments(tracking_number, origin, destination)
-      `)
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-    
-    if (error) throw error
-    return data || []
-  },
-
-  async getAllTickets() {
-    const { data, error } = await supabase
-      .from('support_tickets')
-      .select(`
-        *,
-        users(email, full_name),
-        shipments(tracking_number, origin, destination)
-      `)
-      .order('created_at', { ascending: false })
-    
-    if (error) throw error
-    return data || []
-  },
-
-  async updateTicket(id: string, updates: {
-    status?: string
-    priority?: string
-    message?: string
-  }) {
-    const { data, error } = await supabase
-      .from('support_tickets')
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single()
-    
-    if (error) throw error
-    return data
-  }
-} 
+// Export API client instance
+export const api = new ApiClient(API_BASE)

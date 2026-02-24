@@ -164,19 +164,16 @@ export default function PricingPage() {
                     </Button>
                   </Link>
                 ) : (
-                  <Link href={`/signup?plan=${plan.id}`}>
-                    <Button
-                      className={`w-full ${
-                        plan.popular
-                          ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                          : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                      }`}
-                      size="lg"
-                    >
-                      <CreditCard className="w-5 h-5 mr-2" />
-                      Get Started
-                    </Button>
-                  </Link>
+                  <Button
+                    className={`w-full ${
+                      plan.popular
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
+                    }`}
+                    size="lg"
+                  >
+                    Get Started
+                  </Button>
                 )}
               </div>
             ))}
@@ -303,11 +300,9 @@ export default function PricingPage() {
             Join thousands of companies already using FlipRoutes to streamline their global logistics operations.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/login">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4">
-                Start Free Trial
-              </Button>
-            </Link>
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4">
+              Start Free Trial
+            </Button>
             <Link href="/contact">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-4">
                 Contact Sales

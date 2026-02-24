@@ -145,7 +145,7 @@ export default function LoginPage() {
             </div>
 
             <div className="text-center mt-4">
-              <a href="/signup">
+              <a href="#">
                 <Button type="button" variant="outline" className="w-full">
                   Start Free Trial
                 </Button>
@@ -155,7 +155,7 @@ export default function LoginPage() {
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
-                <a href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
+                <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
                   Sign up
                 </a>
               </p>

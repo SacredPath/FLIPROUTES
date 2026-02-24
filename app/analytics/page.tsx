@@ -185,18 +185,14 @@ export default function AnalyticsPage() {
               and make data-driven decisions with our comprehensive analytics platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/login">
-                <Button size="lg" className="flex items-center text-lg px-8 py-4">
-                  Access Analytics
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button size="lg" variant="outline" className="flex items-center text-lg px-8 py-4">
-                  <Phone className="w-5 h-5 mr-2" />
-                  Schedule Demo
-                </Button>
-              </Link>
+              <Button size="lg" className="flex items-center text-lg px-8 py-4">
+                Access Analytics
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              <Button size="lg" variant="outline" className="flex items-center text-lg px-8 py-4">
+                <Phone className="w-5 h-5 mr-2" />
+                Schedule Demo
+              </Button>
             </div>
           </div>
         </div>
@@ -473,16 +469,12 @@ export default function AnalyticsPage() {
             Get started with our analytics platform and unlock insights from your logistics data
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/login">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4">
-                Access Analytics
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-4">
-                Schedule Demo
-              </Button>
-            </Link>
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4">
+              Access Analytics
+            </Button>
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-4">
+              Schedule Demo
+            </Button>
           </div>
         </div>
       </section>

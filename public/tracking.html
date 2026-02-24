@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Shipment - FlipRoutes</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <style>
+        /* Tailwind-like utility classes */
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .space-x-2 > * + * { margin-left: 0.5rem; }
+        .space-x-6 > * + * { margin-left: 1.5rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-16 { margin-top: 4rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .p-6 { padding: 1.5rem; }
+        .p-8 { padding: 2rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-5xl { font-size: 3rem; }
+        .font-medium { font-weight: 500; }
+        .font-bold { font-weight: 700; }
+        .font-mono { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-900 { color: #111827; }
+        .text-blue-600 { color: #2563eb; }
+        .text-red-500 { color: #ef4444; }
+        .text-red-600 { color: #dc2626; }
+        .text-red-800 { color: #991b1b; }
+        .text-white { color: #ffffff; }
+        .bg-gray-50 { background-color: #f9fafb; }
+        .bg-gray-100 { background-color: #f3f4f6; }
+        .bg-white { background-color: #ffffff; }
+        .bg-blue-600 { background-color: #2563eb; }
+        .bg-blue-700 { background-color: #1d4ed8; }
+        .bg-red-50 { background-color: #fef2f2; }
+        .bg-red-100 { background-color: #fee2e2; }
+        .border { border-width: 1px; }
+        .border-b { border-bottom-width: 1px; }
+        .border-gray-200 { border-color: #e5e7eb; }
+        .border-gray-300 { border-color: #d1d5db; }
+        .border-red-200 { border-color: #fecaca; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .hidden { display: none; }
+        .text-center { text-align: center; }
+        .max-w-4xl { max-width: 56rem; }
+        .max-w-6xl { max-width: 72rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .w-full { width: 100%; }
+        .flex-1 { flex: 1 1 0%; }
+        .grid { display: grid; }
+        .md\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .hover\\:bg-blue-700:hover { background-color: #1d4ed8; }
+        .hover\\:text-blue-600:hover { color: #2563eb; }
+        .focus\\:outline-none:focus { outline: none; }
+        .focus\\:ring-2:focus { box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); }
+        .focus\\:ring-blue-500:focus { box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); }
+        .focus\\:border-transparent:focus { border-color: transparent; }
+        .transition { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        .duration-200 { transition-duration: 200ms; }
+
+        /* Custom styles */
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 20px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 0;
+            bottom: -20px;
+            width: 2px;
+            background: #e5e7eb;
+        }
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #10b981;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 3px #e5e7eb;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .icon {
+            display: inline-block;
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+        }
+        .icon-sm {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.25rem;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        .modal-close:hover {
+            color: #1f2937;
+        }
+        .modal-body {
+            color: #374151;
+            line-height: 1.5;
+        }
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .btn-modal {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-modal-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+        .btn-modal-primary:hover {
+            background-color: #1d4ed8;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <h1 class="text-xl font-bold text-gray-900">FlipRoutes</h1>
+                </div>
+                <nav class="flex space-x-6">
+                    <a href="/" class="text-gray-600 hover:text-blue-600">Home</a>
+                    <a href="tracking.html" class="text-blue-600 font-medium">Track</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Search Section -->
+            <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Track Your Shipment</h2>
+                
+                <div class="flex flex-col sm:flex-row gap-4 mb-4">
+                    <input 
+                        type="text" 
+                        id="trackingNumber" 
+                        placeholder="Enter tracking number"
+                        class="flex-1 form-input"
+                    >
+                    <button 
+                        onclick="trackShipment()" 
+                        class="btn btn-primary"
+                    >
+                        <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>Track
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="hidden bg-white rounded-lg shadow-md p-8 text-center">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-600">Tracking your shipment...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="hidden bg-red-50 border border-red-200 rounded-lg p-6">
+                <div class="flex items-center">
+                    <svg class="icon-sm text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                        <h3 class="text-red-800 font-medium">Tracking Error</h3>
+                        <p id="errorMessage" class="text-red-600 text-sm mt-1"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracking Results -->
+            <div id="trackingResults" class="hidden">
+                <!-- Shipment Details -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Shipment Details</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-600">Tracking Number</p>
+                            <p id="trackingNumberDisplay" class="font-mono font-medium text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Status</p>
+                            <p id="shipmentStatus" class="font-medium text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Origin</p>
+                            <p id="shipmentOrigin" class="font-medium text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Destination</p>
+                            <p id="shipmentDestination" class="font-medium text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Estimated Delivery</p>
+                            <p id="estimatedDelivery" class="font-medium text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Current Location</p>
+                            <p id="currentLocation" class="font-medium text-gray-900"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tracking Timeline -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Tracking History</h3>
+                    <div id="trackingTimeline" class="space-y-4">
+                        <!-- Timeline items will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 FlipRoutes. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Alert</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                Alert message
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal btn-modal-primary" onclick="closeModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://jrbavagemjicwnltwval.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyYmF2YWdlbWppY3dubHR3dmFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4NDg0NzgsImV4cCI6MjA4NzQyNDQ3OH0.eY3c9suYSHeDrro8yCcqh-6KMul2GEHSNs2BndTo2N4';
+
+        // Simple Supabase REST API client
+        class SupabaseClient {
+            constructor(url, key) {
+                this.url = url;
+                this.key = key;
+            }
+
+            from(table) {
+                return new TableQuery(this.url, this.key, table);
+            }
+        }
+
+        class TableQuery {
+            constructor(url, key, table) {
+                this.url = url;
+                this.key = key;
+                this.table = table;
+                this.queryParams = new URLSearchParams();
+            }
+
+            select(columns = '*') {
+                this.queryParams.set('select', columns);
+                return this;
+            }
+
+            eq(column, value) {
+                this.queryParams.append(column, `eq.${value}`);
+                return this;
+            }
+
+            order(column, options = {}) {
+                const ascending = options.ascending !== false ? 'asc' : 'desc';
+                this.queryParams.set('order', `${column}.${ascending}`);
+                return this;
+            }
+
+            async single() {
+                this.queryParams.set('limit', '1');
+                const response = await this.execute();
+                return response && response.data ? response.data[0] : null;
+            }
+
+            async execute() {
+                const url = `${this.url}/rest/v1/${this.table}?${this.queryParams}`;
+                console.log('Making request to:', url);
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'apikey': this.key,
+                        'Authorization': `Bearer ${this.key}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Request failed');
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+                return data;
+            }
+        }
+
+        const supabase = new SupabaseClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Modal functions
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').textContent = message;
+            document.getElementById('alertModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('alertModal').style.display = 'none';
+        }
+
+        function showError(message) {
+            showModal('Error', message);
+        }
+
+        // Tracking function
+        async function trackShipment() {
+            const trackingNumber = document.getElementById('trackingNumber').value.trim();
+            
+            if (!trackingNumber) {
+                showError('Please enter a tracking number');
+                return;
+            }
+
+            showLoading();
+            hideError();
+            hideResults();
+
+            try {
+                console.log('Looking for shipment with tracking number:', trackingNumber);
+                console.log('Supabase URL:', SUPABASE_URL);
+                console.log('Using table: shipments');
+                
+                // Fetch shipment with retry mechanism and multiple query approaches
+                let shipmentResponse = null;
+                let retries = 0;
+                const maxRetries = 3;
+                
+                while (!shipmentResponse && retries < maxRetries) {
+                    console.log(`Attempt ${retries + 1} to fetch shipment`);
+                    
+                    // Try multiple query approaches
+                    const response = await supabase
+                        .from('shipments')
+                        .select('*')
+                        .eq('tracking_number', trackingNumber)
+                        .execute();
+                    
+                    console.log('Shipment response:', response);
+                    
+                    // Check if response has data in different formats
+                    if (response && Array.isArray(response) && response.length > 0) {
+                        shipmentResponse = response[0];
+                        console.log('Found shipment via response array:', shipmentResponse);
+                        break;
+                    } else if (response && response.id) {
+                        shipmentResponse = response;
+                        console.log('Found shipment via response.id:', shipmentResponse);
+                        break;
+                    }
+                    
+                    retries++;
+                    
+                    if (retries < maxRetries) {
+                        // Wait before retrying
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
+                }
+
+                console.log('Final shipment response:', shipmentResponse);
+
+                if (!shipmentResponse) {
+                    console.log('Shipment not found after', maxRetries, 'attempts');
+                    showError('Shipment not found. Please check your tracking number.');
+                    return;
+                }
+
+                // Fetch tracking events
+                console.log('Fetching tracking events for shipment ID:', shipmentResponse.id);
+                const eventsResponse = await supabase
+                    .from('tracking_events')
+                    .select('*')
+                    .eq('shipment_id', shipmentResponse.id)
+                    .order('timestamp', { ascending: false })
+                    .execute();
+
+                console.log('Events response:', eventsResponse);
+
+                if (!eventsResponse) {
+                    showError('Failed to fetch tracking events. Please try again.');
+                    return;
+                }
+
+                displayTrackingResults(shipmentResponse, eventsResponse);
+            } catch (error) {
+                console.error('Tracking error:', error);
+                showError('An error occurred while tracking your shipment. Please try again.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function displayTrackingResults(shipment, events) {
+            // Update shipment details
+            document.getElementById('trackingNumberDisplay').textContent = shipment.tracking_number;
+            document.getElementById('shipmentStatus').textContent = shipment.status || 'In Transit';
+            document.getElementById('shipmentOrigin').textContent = shipment.origin || 'Unknown';
+            document.getElementById('shipmentDestination').textContent = shipment.destination || 'Unknown';
+            document.getElementById('estimatedDelivery').textContent = shipment.estimated_delivery || 'Not available';
+            document.getElementById('currentLocation').textContent = events[0]?.location || 'Unknown';
+
+            // Update timeline
+            const timeline = document.getElementById('trackingTimeline');
+            timeline.innerHTML = '';
+
+            events.forEach((event, index) => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                timelineItem.innerHTML = `
+                    <div class="timeline-dot"></div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-medium text-gray-900">${event.event_type || 'Status Update'}</h4>
+                            <span class="text-sm text-gray-500">${formatDate(event.timestamp)}</span>
+                        </div>
+                        <p class="text-gray-600 text-sm">${event.description || 'No description available'}</p>
+                        <p class="text-gray-500 text-xs mt-1">
+                            <svg class="icon-sm inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            </svg>${event.location || 'Unknown location'}
+                        </p>
+                    </div>
+                `;
+                timeline.appendChild(timelineItem);
+            });
+
+            showResults();
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp) return 'Unknown date';
+            return new Date(timestamp).toLocaleString();
+        }
+
+        function showLoading() {
+            document.getElementById('loadingState').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingState').classList.add('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorState').classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('errorState').classList.add('hidden');
+        }
+
+        function showResults() {
+            document.getElementById('trackingResults').classList.remove('hidden');
+        }
+
+        function hideResults() {
+            document.getElementById('trackingResults').classList.add('hidden');
+        }
+
+        // Handle Enter key in search input
+        document.getElementById('trackingNumber').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                trackShipment();
+            }
+        });
+    </script>
+</body>
+</html>

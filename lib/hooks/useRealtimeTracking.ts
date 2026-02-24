@@ -1,88 +1,53 @@
-'use client'
-
+/**
+ * Hook for real-time tracking events subscription
+ */
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { TrackingEvent } from '@/lib/supabase'
-import { 
-  mockTrackingEventsGermanyMadrid, 
-  mockShipmentGermanyMadrid,
-  mockTrackingEventsNewYorkLondon,
-  mockShipmentNewYorkLondon,
-  mockTrackingEventsShanghaiLA,
-  mockShipmentShanghaiLA
-} from '@/lib/mockData'
 
-/**
- * Hook for real-time tracking events subscription
- * Automatically subscribes to tracking_events table changes for a specific shipment
- */
 export function useRealtimeTracking(shipmentId: string | null) {
   const [trackingEvents, setTrackingEvents] = useState<TrackingEvent[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!shipmentId) {
-      setLoading(false)
+      // No shipment ID - don't set up subscription
       return
     }
 
-    // Initial fetch - check mock data first
+    // Initial fetch - no mock data
     const fetchTrackingEvents = async () => {
       try {
-        // Check if this is a mock shipment
-        if (shipmentId === mockShipmentGermanyMadrid.id) {
-          setTrackingEvents(mockTrackingEventsGermanyMadrid.sort((a, b) => 
-            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-          ))
-          setError(null)
-          setLoading(false)
-          return
-        }
-        if (shipmentId === mockShipmentNewYorkLondon.id) {
-          setTrackingEvents(mockTrackingEventsNewYorkLondon.sort((a, b) => 
-            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-          ))
-          setError(null)
-          setLoading(false)
-          return
-        }
-        if (shipmentId === mockShipmentShanghaiLA.id) {
-          setTrackingEvents(mockTrackingEventsShanghaiLA.sort((a, b) => 
-            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-          ))
-          setError(null)
-          setLoading(false)
-          return
-        }
-
-        // Fall back to database
-        const { data, error: fetchError } = await supabase
+        setLoading(true)
+        setError(null)
+        
+        const { data, error } = await supabase
           .from('tracking_events')
           .select('*')
           .eq('shipment_id', shipmentId)
           .order('timestamp', { ascending: false })
 
-        if (fetchError) throw fetchError
-        setTrackingEvents(data || [])
-        setError(null)
-      } catch (err: any) {
+        if (error) {
+          console.error('Error fetching tracking events:', error)
+          setError(error.message)
+        } else {
+          setTrackingEvents(data || [])
+        }
+      } catch (err) {
         console.error('Error fetching tracking events:', err)
-        setError(err.message || 'Failed to load tracking events')
+        setError('Failed to fetch tracking events')
       } finally {
         setLoading(false)
       }
     }
 
     fetchTrackingEvents()
+  }, [shipmentId])
 
-    // Only set up real-time subscription for non-mock shipments
-    const isMockShipment = shipmentId === mockShipmentGermanyMadrid.id || 
-                          shipmentId === mockShipmentNewYorkLondon.id || 
-                          shipmentId === mockShipmentShanghaiLA.id
-
-    if (isMockShipment) {
-      return // Don't set up subscription for mock data
+  useEffect(() => {
+    if (!shipmentId) {
+      return
     }
 
     // Set up real-time subscription

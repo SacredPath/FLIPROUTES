@@ -57,7 +57,7 @@ export default function ResetPasswordPage() {
         setStatus('error')
       } else {
         setStatus('success')
-        setTimeout(() => router.push('/login'), 2000)
+        setTimeout(() => router.push('/'), 2000)
       }
     } catch (err: any) {
       setError(err.message || 'An error occurred. Please try again.')
@@ -86,7 +86,7 @@ export default function ResetPasswordPage() {
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Password Updated</h3>
               <p className="text-sm text-gray-600 mb-6">
-                Your password has been successfully updated. Redirecting to login...
+                Your password has been successfully updated. Redirecting to home...
               </p>
             </div>
           ) : (
@@ -174,9 +174,9 @@ export default function ResetPasswordPage() {
           )}
 
           <div className="mt-6 text-center">
-            <Link href="/login" className="text-sm text-blue-600 hover:text-blue-500">
-              Back to login
-            </Link>
+            <a href="#" className="text-sm text-blue-600 hover:text-blue-500">
+              Back to home
+            </a>
           </div>
         </Card>
       </div>
