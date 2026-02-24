@@ -268,7 +268,8 @@ export const userApi = {
   getUsers: api.getUsers,
   getUserById: api.getUserById,
   updateUser: api.updateUser,
-  deleteUser: api.deleteUser
+  deleteUser: api.deleteUser,
+  updateProfile: api.updateUser
 }
 
 // Tracking events API functions
